@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Agenda 8C</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <!-- Fonte -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            background: white;
+            border: 2px solid #d1d5db;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        input[type="checkbox"]:checked {
+            background: #22c55e;
+            border-color: #22c55e;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div class="h-full overflow-auto">
+        <header class="bg-white/80 backdrop-blur-lg border-b border-gray-100 sticky top-0 z-40">
+            <div class="max-w-4xl mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
+                            <span class="text-white text-xl">📚</span>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">Agenda Escolar</h1>
+                            <p class="text-sm text-gray-500">Turma 8C</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="login-link" onclick="openLoginModal()" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg> Admin
+                        </button>
+                        <button id="logout-btn" onclick="logout()" class="hidden text-red-600 hover:text-red-800 font-medium text-sm flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-red-50 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg> Sair
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-4xl mx-auto px-4 py-6">
+            <!-- Navegação e filtro -->
+            <div class="bg-white rounded-2xl shadow-lg p-4 mb-6">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-2">
+                        <button onclick="prevDay()" class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <div class="text-center min-w-48">
+                            <p id="current-date" class="font-bold text-gray-800"></p>
+                        </div>
+                        <button onclick="nextDay()" class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                        <button onclick="goToToday()" class="ml-2 px-3 py-2 text-sm bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded-lg transition-colors font-medium">Hoje</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm text-gray-500">Filtrar:</label>
+                        <select id="materia-filter" onchange="filterByMateria(this.value)" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <option value="todas">Todas as matérias</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Container das tarefas -->
+            <div id="tarefas-container" class="space-y-4"></div>
+
+            <!-- Painel Admin -->
+            <div id="admin-panel" class="hidden mt-8">
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-t-2xl px-6 py-4">
+                    <h2 class="text-white font-bold text-lg flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg> Adicionar Nova Tarefa
+                    </h2>
+                </div>
+                <form onsubmit="addTarefa(event)" class="bg-white rounded-b-2xl shadow-lg p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Data *</label>
+                            <input type="date" id="tarefa-data" required min="2026-03-03" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Matéria *</label>
+                            <input type="text" id="tarefa-materia" required placeholder="Ex: Matemática" list="materias-list" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <datalist id="materias-list">
+                                <option value="Matemática">
+                                <option value="Português">
+                                <option value="História">
+                                <option value="Geografia">
+                                <option value="Ciências">
+                                <option value="Inglês">
+                                <option value="Arte">
+                                <option value="Educação Física">
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Descrição *</label>
+                        <input type="text" id="tarefa-descricao" required placeholder="Ex: Exercícios página 45-47" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Link (opcional)</label>
+                        <input type="url" id="tarefa-link" placeholder="https://..." class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <button id="add-btn" type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-3 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200">Adicionar Tarefa</button>
+                </form>
+            </div>
+        </main>
+
+        <footer class="text-center py-6 text-gray-400 text-sm">
+            <p>Agenda Escolar - Turma 8C © 2026</p>
+        </footer>
+    </div>
+
+    <!-- Modal de Login -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4 flex items-center justify-between">
+                <h3 class="text-white font-bold text-lg">Login Administrativo</h3>
+                <button onclick="closeLoginModal()" class="text-white/80 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <form onsubmit="doLogin(event)" class="p-6">
+                <div id="login-error" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm"></div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                    <input type="email" id="login-email" required placeholder="admin@8c.com" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <button id="login-btn" type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-3 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação de exclusão -->
+    <div id="confirm-delete" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-800 mb-2">Excluir Tarefa?</h3>
+            <p class="text-gray-500 mb-6">Esta ação não pode ser desfeita.</p>
+            <div class="flex gap-3">
+                <button id="cancel-delete-btn" class="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-colors">Cancelar</button>
+                <button id="confirm-delete-btn" class="flex-1 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl transition-colors">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50"></div>
+
+    <!-- Firebase SDK (modular) -->
+    <script type="module">
+        // ===== CONFIGURAÇÃO DO FIREBASE =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyByqfGXBrIqt0cXPI3MrTQjdD-wVzLfwiU",
+            authDomain: "agenda-8c.firebaseapp.com",
+            databaseURL: "https://agenda-8c-default-rtdb.firebaseio.com", // URL do Realtime Database
+            projectId: "agenda-8c",
+            storageBucket: "agenda-8c.firebasestorage.app",
+            messagingSenderId: "1091712303422",
+            appId: "1:1091712303422:web:8a6da6352c13fce4542c6f"
+        };
+
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, push, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        // Referência para as tarefas no Realtime Database
+        const tarefasRef = ref(db, 'tarefas');
+
+        // ===== ESTADO GLOBAL =====
+        let tarefas = [];               // array de tarefas { id, ... }
+        let currentDate = new Date('2026-03-03');
+        let isAdmin = false;
+        let materiaFilter = 'todas';
+        const STORAGE_KEY = 'concluidas_8c';
+
+        // ===== LOCALSTORAGE =====
+        function getConcluidas() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+        }
+        function setConcluida(id, concluida) {
+            const concluidas = getConcluidas();
+            if (concluida && !concluidas.includes(id)) concluidas.push(id);
+            else if (!concluida) {
+                const index = concluidas.indexOf(id);
+                if (index > -1) concluidas.splice(index, 1);
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(concluidas));
+        }
+        function isConcluida(id) { return getConcluidas().includes(id); }
+
+        // ===== FORMATAÇÃO =====
+        function formatDate(dateStr) {
+            const [year, month, day] = dateStr.split('-');
+            const weekdays = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+            const date = new Date(year, month - 1, day);
+            return `${day}/${month}/${year} - ${weekdays[date.getDay()]}`;
+        }
+        function dateToString(date) { return date.toISOString().split('T')[0]; }
+
+        // ===== MATÉRIAS ÚNICAS =====
+        function getMaterias() {
+            return [...new Set(tarefas.map(t => t.materia || ''))].filter(m => m).sort();
+        }
+
+        // ===== FILTRAR TAREFAS DO DIA =====
+        function getTarefasDoDia(dateStr) {
+            let filtered = tarefas.filter(t => t.data === dateStr);
+            if (materiaFilter !== 'todas') filtered = filtered.filter(t => t.materia === materiaFilter);
+            return filtered;
+        }
+
+        // ===== AGRUPAR =====
+        function agruparPorMateria(tarefasDoDia) {
+            const grupos = {};
+            tarefasDoDia.forEach(t => {
+                if (!grupos[t.materia]) grupos[t.materia] = [];
+                grupos[t.materia].push(t);
+            });
+            return grupos;
+        }
+
+        // ===== CORES =====
+        function getCorMateria(materia) {
+            const cores = {
+                'Matemática': 'bg-blue-500', 'Português': 'bg-green-500', 'História': 'bg-amber-500',
+                'Geografia': 'bg-teal-500', 'Ciências': 'bg-purple-500', 'Inglês': 'bg-red-500',
+                'Arte': 'bg-pink-500', 'Educação Física': 'bg-orange-500'
+            };
+            return cores[materia] || 'bg-gray-500';
+        }
+
+        // ===== RENDERIZAR =====
+        function renderTarefas() {
+            const container = document.getElementById('tarefas-container');
+            const dateStr = dateToString(currentDate);
+            const tarefasDoDia = getTarefasDoDia(dateStr);
+            
+            document.getElementById('current-date').textContent = formatDate(dateStr);
+
+            if (tarefasDoDia.length === 0) {
+                container.innerHTML = `<div class="bg-white rounded-2xl shadow-lg p-8 text-center"><div class="text-6xl mb-4">📚</div><p class="text-gray-500 text-lg">Nenhuma tarefa para este dia${materiaFilter !== 'todas' ? ' nesta matéria' : ''}.</p><p class="text-gray-400 text-sm mt-2">Use os botões de navegação para ver outros dias.</p></div>`;
+                return;
+            }
+
+            const grupos = agruparPorMateria(tarefasDoDia);
+            let html = '';
+
+            Object.keys(grupos).sort().forEach(materia => {
+                const cor = getCorMateria(materia);
+                html += `<div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-4"><div class="${cor} px-4 py-3 flex items-center gap-2"><span class="text-white font-bold text-lg">${materia}</span><span class="bg-white/20 text-white text-sm px-2 py-0.5 rounded-full">${grupos[materia].length}</span></div><div class="overflow-x-auto"><table class="w-full"><thead class="bg-gray-50"><tr><th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 w-8">✓</th><th class="px-4 py-3 text-left text-xs font-semibold text-gray-500">Descrição</th><th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 w-24">Link</th>${isAdmin ? '<th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 w-20">Ação</th>' : ''}</tr></thead><tbody class="divide-y divide-gray-100">`;
+
+                grupos[materia].forEach(tarefa => {
+                    const concluida = isConcluida(tarefa.id);
+                    html += `<tr class="hover:bg-gray-50 transition-colors ${concluida ? 'bg-green-50' : ''}"><td class="px-4 py-4"><input type="checkbox" ${concluida ? 'checked' : ''} onchange="window.toggleConcluida('${tarefa.id}')" class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer"></td><td class="px-4 py-4"><span class="${concluida ? 'line-through text-gray-400' : 'text-gray-700'}">${tarefa.descricao}</span></td><td class="px-4 py-4">${tarefa.link ? `<a href="${tarefa.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-medium"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>Abrir</a>` : '<span class="text-gray-300">—</span>'}</td>${isAdmin ? `<td class="px-4 py-4 text-center"><button onclick="window.deleteTarefa('${tarefa.id}')" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-colors" title="Excluir tarefa"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></td>` : ''}</tr>`;
+                });
+
+                html += '</tbody></table></div></div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ===== ATUALIZAR FILTRO =====
+        function updateMateriaFilter() {
+            const select = document.getElementById('materia-filter');
+            const materias = getMaterias();
+            select.innerHTML = '<option value="todas">Todas as matérias</option>';
+            materias.forEach(m => select.innerHTML += `<option value="${m}" ${materiaFilter === m ? 'selected' : ''}>${m}</option>`);
+        }
+
+        // ===== NAVEGAÇÃO =====
+        window.prevDay = function() { currentDate.setDate(currentDate.getDate() - 1); renderTarefas(); };
+        window.nextDay = function() { currentDate.setDate(currentDate.getDate() + 1); renderTarefas(); };
+        window.goToToday = function() { currentDate = new Date('2026-03-03'); renderTarefas(); };
+        window.toggleConcluida = function(id) { setConcluida(id, !isConcluida(id)); renderTarefas(); };
+        window.filterByMateria = function(value) { materiaFilter = value; renderTarefas(); };
+
+        // ===== LOGIN =====
+        window.openLoginModal = function() {
+            document.getElementById('login-modal').classList.remove('hidden');
+            document.getElementById('login-modal').classList.add('flex');
+        };
+        window.closeLoginModal = function() {
+            document.getElementById('login-modal').classList.add('hidden');
+            document.getElementById('login-modal').classList.remove('flex');
+            document.getElementById('login-error').classList.add('hidden');
+        };
+        window.doLogin = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errorEl = document.getElementById('login-error');
+            const btn = document.getElementById('login-btn');
+
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>';
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                window.closeLoginModal();
+            } catch (error) {
+                errorEl.textContent = 'E-mail ou senha incorretos';
+                errorEl.classList.remove('hidden');
+                btn.disabled = false;
+                btn.textContent = 'Entrar';
+            }
+        };
+        window.logout = async function() { await signOut(auth); };
+
+        // ===== ADICIONAR TAREFA (RTDB) =====
+        window.addTarefa = async function(e) {
+            e.preventDefault();
+            const data = document.getElementById('tarefa-data').value;
+            const materia = document.getElementById('tarefa-materia').value;
+            const descricao = document.getElementById('tarefa-descricao').value;
+            const link = document.getElementById('tarefa-link').value;
+            const btn = document.getElementById('add-btn');
+
+            if (!data || !materia || !descricao) { showToast('Preencha todos os campos obrigatórios', 'error'); return; }
+
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>';
+
+            try {
+                await push(tarefasRef, { data, materia, descricao, link: link || '' });
+                e.target.reset();
+                showToast('Tarefa adicionada com sucesso!', 'success');
+            } catch (error) {
+                console.error(error);
+                showToast('Erro ao adicionar tarefa', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Adicionar Tarefa';
+            }
+        };
+
+        // ===== DELETAR TAREFA (RTDB) =====
+        window.deleteTarefa = async function(id) {
+            const confirmDiv = document.getElementById('confirm-delete');
+            const confirmBtn = document.getElementById('confirm-delete-btn');
+            const cancelBtn = document.getElementById('cancel-delete-btn');
+            
+            confirmDiv.classList.remove('hidden');
+            confirmDiv.classList.add('flex');
+
+            return new Promise((resolve) => {
+                const handleConfirm = async () => {
+                    confirmDiv.classList.add('hidden');
+                    confirmDiv.classList.remove('flex');
+                    try {
+                        await remove(ref(db, `tarefas/${id}`));
+                        showToast('Tarefa excluída com sucesso!', 'success');
+                    } catch (error) {
+                        console.error(error);
+                        showToast('Erro ao excluir tarefa', 'error');
+                    }
+                    cleanup();
+                };
+                const handleCancel = () => {
+                    confirmDiv.classList.add('hidden');
+                    confirmDiv.classList.remove('flex');
+                    cleanup();
+                };
+                const cleanup = () => {
+                    confirmBtn.removeEventListener('click', handleConfirm);
+                    cancelBtn.removeEventListener('click', handleCancel);
+                };
+                confirmBtn.addEventListener('click', handleConfirm);
+                cancelBtn.addEventListener('click', handleCancel);
+            });
+        };
+
+        // ===== UI ADMIN =====
+        function updateAdminUI(user) {
+            isAdmin = !!user;
+            const adminPanel = document.getElementById('admin-panel');
+            const loginLink = document.getElementById('login-link');
+            const logoutBtn = document.getElementById('logout-btn');
+            if (isAdmin) {
+                adminPanel.classList.remove('hidden');
+                loginLink.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+            } else {
+                adminPanel.classList.add('hidden');
+                loginLink.classList.remove('hidden');
+                logoutBtn.classList.add('hidden');
+            }
+            renderTarefas();
+        }
+
+        // ===== TOAST =====
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const colors = { success: 'bg-green-500', error: 'bg-red-500', info: 'bg-blue-500' };
+            toast.className = `fixed bottom-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-xl shadow-lg transform transition-all duration-300 z-50`;
+            toast.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+
+        // ===== OUVINTE DE AUTENTICAÇÃO =====
+        onAuthStateChanged(auth, updateAdminUI);
+
+        // ===== OUVINTE EM TEMPO REAL (RTDB) =====
+        onValue(tarefasRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                tarefas = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                }));
+            } else {
+                tarefas = [];
+            }
+            updateMateriaFilter();
+            renderTarefas();
+        }, (error) => {
+            console.error("Erro no RTDB:", error);
+            showToast('Erro ao carregar tarefas', 'error');
+        });
+
+        // ===== INICIALIZAÇÃO =====
+        renderTarefas();
+    </script>
+</body>
+</html>
