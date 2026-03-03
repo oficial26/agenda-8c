@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Agenda 8C</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-    <!-- Fonte -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -186,13 +184,13 @@
     <!-- Toast -->
     <div id="toast" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50"></div>
 
-    <!-- Firebase SDK (modular) -->
+    <!-- Firebase SDK -->
     <script type="module">
         // ===== CONFIGURAÇÃO DO FIREBASE =====
         const firebaseConfig = {
             apiKey: "AIzaSyByqfGXBrIqt0cXPI3MrTQjdD-wVzLfwiU",
             authDomain: "agenda-8c.firebaseapp.com",
-            databaseURL: "https://agenda-8c-default-rtdb.firebaseio.com", // URL do Realtime Database
+            databaseURL: "https://agenda-8c-default-rtdb.firebaseio.com",
             projectId: "agenda-8c",
             storageBucket: "agenda-8c.firebasestorage.app",
             messagingSenderId: "1091712303422",
@@ -201,22 +199,22 @@
 
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getDatabase, ref, push, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-        // Inicializar Firebase
+        // Inicializar Firebase (apenas banco de dados, sem autenticação)
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        const auth = getAuth(app);
-
-        // Referência para as tarefas no Realtime Database
         const tarefasRef = ref(db, 'tarefas');
 
         // ===== ESTADO GLOBAL =====
-        let tarefas = [];               // array de tarefas { id, ... }
+        let tarefas = [];
         let currentDate = new Date('2026-03-03');
-        let isAdmin = false;
+        let isAdmin = false; // Começa deslogado
         let materiaFilter = 'todas';
         const STORAGE_KEY = 'concluidas_8c';
+
+        // Credenciais fixas (mude aqui se quiser)
+        const ADMIN_EMAIL = 'admin@8c.com';
+        const ADMIN_PASSWORD = '123456';
 
         // ===== LOCALSTORAGE =====
         function getConcluidas() {
@@ -320,7 +318,7 @@
         window.toggleConcluida = function(id) { setConcluida(id, !isConcluida(id)); renderTarefas(); };
         window.filterByMateria = function(value) { materiaFilter = value; renderTarefas(); };
 
-        // ===== LOGIN =====
+        // ===== LOGIN FIXO =====
         window.openLoginModal = function() {
             document.getElementById('login-modal').classList.remove('hidden');
             document.getElementById('login-modal').classList.add('flex');
@@ -330,31 +328,39 @@
             document.getElementById('login-modal').classList.remove('flex');
             document.getElementById('login-error').classList.add('hidden');
         };
-        window.doLogin = async function(e) {
+        window.doLogin = function(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             const errorEl = document.getElementById('login-error');
-            const btn = document.getElementById('login-btn');
 
-            btn.disabled = true;
-            btn.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>';
-
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
+            // Verificação fixa
+            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                updateAdminUI();
                 window.closeLoginModal();
-            } catch (error) {
+                showToast('Login realizado!', 'success');
+                renderTarefas(); // Para mostrar botões de excluir
+            } else {
                 errorEl.textContent = 'E-mail ou senha incorretos';
                 errorEl.classList.remove('hidden');
-                btn.disabled = false;
-                btn.textContent = 'Entrar';
             }
         };
-        window.logout = async function() { await signOut(auth); };
+        window.logout = function() {
+            isAdmin = false;
+            updateAdminUI();
+            showToast('Logout realizado!', 'info');
+            renderTarefas();
+        };
 
-        // ===== ADICIONAR TAREFA (RTDB) =====
+        // ===== ADICIONAR TAREFA =====
         window.addTarefa = async function(e) {
             e.preventDefault();
+            if (!isAdmin) {
+                showToast('Você precisa estar logado como admin', 'error');
+                return;
+            }
+
             const data = document.getElementById('tarefa-data').value;
             const materia = document.getElementById('tarefa-materia').value;
             const descricao = document.getElementById('tarefa-descricao').value;
@@ -379,8 +385,13 @@
             }
         };
 
-        // ===== DELETAR TAREFA (RTDB) =====
+        // ===== DELETAR TAREFA =====
         window.deleteTarefa = async function(id) {
+            if (!isAdmin) {
+                showToast('Você precisa estar logado como admin', 'error');
+                return;
+            }
+
             const confirmDiv = document.getElementById('confirm-delete');
             const confirmBtn = document.getElementById('confirm-delete-btn');
             const cancelBtn = document.getElementById('cancel-delete-btn');
@@ -416,11 +427,11 @@
         };
 
         // ===== UI ADMIN =====
-        function updateAdminUI(user) {
-            isAdmin = !!user;
+        function updateAdminUI() {
             const adminPanel = document.getElementById('admin-panel');
             const loginLink = document.getElementById('login-link');
             const logoutBtn = document.getElementById('logout-btn');
+            
             if (isAdmin) {
                 adminPanel.classList.remove('hidden');
                 loginLink.classList.add('hidden');
@@ -430,7 +441,6 @@
                 loginLink.classList.remove('hidden');
                 logoutBtn.classList.add('hidden');
             }
-            renderTarefas();
         }
 
         // ===== TOAST =====
@@ -442,9 +452,6 @@
             toast.classList.remove('translate-y-20', 'opacity-0');
             setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
-
-        // ===== OUVINTE DE AUTENTICAÇÃO =====
-        onAuthStateChanged(auth, updateAdminUI);
 
         // ===== OUVINTE EM TEMPO REAL (RTDB) =====
         onValue(tarefasRef, (snapshot) => {
@@ -466,6 +473,7 @@
 
         // ===== INICIALIZAÇÃO =====
         renderTarefas();
+        updateAdminUI();
     </script>
 </body>
 </html>
