@@ -207,7 +207,7 @@
 
         // ===== ESTADO GLOBAL =====
         let tarefas = [];
-        let currentDate = new Date('2026-04-03');
+        let currentDate = new Date();
         let isAdmin = false; // Começa deslogado
         let materiaFilter = 'todas';
         const STORAGE_KEY = 'concluidas_8c';
@@ -238,8 +238,12 @@
             const date = new Date(year, month - 1, day);
             return `${day}/${month}/${year} - ${weekdays[date.getDay()]}`;
         }
-        function dateToString(date) { return date.toISOString().split('T')[0]; }
-
+        function dateToString(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+        }
         // ===== MATÉRIAS ÚNICAS =====
         function getMaterias() {
             return [...new Set(tarefas.map(t => t.materia || ''))].filter(m => m).sort();
@@ -314,7 +318,7 @@
         // ===== NAVEGAÇÃO =====
         window.prevDay = function() { currentDate.setDate(currentDate.getDate() - 1); renderTarefas(); };
         window.nextDay = function() { currentDate.setDate(currentDate.getDate() + 1); renderTarefas(); };
-        window.goToToday = function() { currentDate = new Date('2026-03-03'); renderTarefas(); };
+        window.goToToday = function() { currentDate = new Date(); renderTarefas(); };
         window.toggleConcluida = function(id) { setConcluida(id, !isConcluida(id)); renderTarefas(); };
         window.filterByMateria = function(value) { materiaFilter = value; renderTarefas(); };
 
