@@ -1,21 +1,31 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full bg-stone-50">
+<html lang="pt-BR" class="h-full bg-slate-50 antialiased">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" content="#dc2626">
     <title>Portal CSU • Turma 8C</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Configuração de Cores Customizadas no Tailwind -->
+    <!-- Configuração Tailwind -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        csu: { red: '#dc2626', dark: '#111827', light: '#fef2f2' }
+                        csu: { red: '#dc2626', dark: '#0f172a', light: '#f8fafc', accent: '#ef4444' }
                     },
-                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'float': '0 10px 30px -5px rgba(220, 38, 38, 0.15)'
+                    }
                 }
             }
         }
@@ -23,49 +33,49 @@
 
     <style>
         /* ==========================================
-           ESTILOS GERAIS E SCROLLBAR
+           BASE, SCROLLBAR E ACESSIBILIDADE
            ========================================== */
         * { font-family: 'Plus Jakarta Sans', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f8fafc; }
-        ::-webkit-scrollbar-thumb { background: #ef4444; border-radius: 99px; }
-        ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
         
-        /* Checkbox Customizada (Verde quando concluída) */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; border: 2px solid #f8fafc; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Foco para Acessibilidade */
+        *:focus-visible { outline: 3px solid #dc2626; outline-offset: 2px; border-radius: 4px; }
+
+        /* Checkbox Customizada (Acessível) */
         input[type="checkbox"] {
-            appearance: none;
-            -webkit-appearance: none;
-            background: #fff;
-            border: 2px solid #e5e7eb;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            appearance: none; -webkit-appearance: none;
+            width: 1.5rem; height: 1.5rem;
+            background: #fff; border: 2px solid #cbd5e1; border-radius: 0.375rem;
+            cursor: pointer; transition: all 0.2s ease;
         }
+        input[type="checkbox"]:hover { border-color: #94a3b8; }
         input[type="checkbox"]:checked {
-            background: #10b981;
-            border-color: #10b981;
+            background-color: #10b981; border-color: #10b981;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E");
-            background-size: 80%;
-            background-position: center;
-            background-repeat: no-repeat;
+            background-size: 70%; background-position: center; background-repeat: no-repeat;
         }
+        input[type="checkbox"]:focus-visible { outline: 3px solid #34d399; outline-offset: 2px; }
 
         /* ==========================================
-           ANIMAÇÕES COMPLEXAS (URSO E ESTRELAS)
+           ANIMAÇÕES COMPLEXAS CORRIGIDAS
            ========================================== */
         @keyframes bearEntrance {
             0% { transform: scale(0) translateY(100px); opacity: 0; }
             60% { transform: scale(1.1) translateY(-10px); opacity: 1; filter: drop-shadow(0 0 40px rgba(220, 38, 38, 0.8)); }
-            100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.5)); }
+            100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.5)); opacity: 1; }
         }
         @keyframes starPop {
             0% { transform: scale(0) rotate(-45deg); opacity: 0; }
             50% { transform: scale(1.5) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 20px rgba(250, 204, 21, 1)); }
             100% { transform: scale(1) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.6)); }
         }
-        @keyframes textShine {
-            0% { background-position: 200% center; }
-            100% { background-position: -200% center; }
-        }
+        @keyframes textShine { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
         .anim-bear { animation: bearEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         .anim-star-1 { animation: starPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.4s forwards; }
         .anim-star-2 { animation: starPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s forwards; }
@@ -73,46 +83,45 @@
         
         .anim-text {
             background-size: 200% auto;
-            animation: textShine 3s linear infinite;
             opacity: 0;
-            animation: textShine 3s linear infinite, fadeIn 0.5s 1s forwards;
+            animation: fadeIn 0.5s 1s forwards, textShine 3s linear infinite 1s;
         }
-        @keyframes fadeIn { to { opacity: 1; } }
 
-        /* Confetes */
         .confetti { position: absolute; top: -10px; z-index: 101; pointer-events: none; }
     </style>
 </head>
-<body class="min-h-full flex flex-col text-csu-dark">
+<body class="min-h-full flex flex-col text-slate-800 selection:bg-red-200 selection:text-red-900">
 
     <!-- ==========================================
-         HEADER PRINCIPAL
+         HEADER PRINCIPAL (ACESSÍVEL E MODERNO)
          ========================================== -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-red-100 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-5xl mx-auto px-4 py-3 sm:py-4">
+    <header class="bg-white/80 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-40 shadow-sm" role="banner">
+        <div class="max-w-6xl mx-auto px-4 py-3 sm:py-4">
             <div class="flex items-center justify-between">
                 
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 sm:gap-4">
                     <!-- Logo CSU -->
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-csu-red rounded-xl flex items-center justify-center shadow-md shadow-red-200">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-csu-red to-red-700 rounded-2xl flex items-center justify-center shadow-lg shadow-red-200/50 flex-shrink-0" aria-hidden="true">
                         <span class="text-white font-black text-xl tracking-tighter">CSU</span>
                     </div>
                     <div>
-                        <h1 class="text-sm sm:text-lg font-extrabold text-csu-dark leading-none">Colégio Santa Úrsula</h1>
+                        <h1 class="text-base sm:text-xl font-extrabold text-csu-dark leading-tight tracking-tight">Colégio Santa Úrsula</h1>
                         <!-- TEXTO GATILHO DA ANIMAÇÃO -->
-                        <button onclick="triggerBearAnimation()" class="text-xs font-bold text-csu-red bg-red-50 hover:bg-red-100 px-2 py-0.5 rounded-full mt-1 transition-colors cursor-pointer text-left focus:outline-none">
-                            Turma 8C 🐻 (Clique-me)
+                        <button onclick="triggerBearAnimation()" class="text-sm font-bold text-csu-accent hover:text-red-700 bg-red-50/50 hover:bg-red-100 px-2.5 py-0.5 rounded-md mt-0.5 transition-all cursor-pointer text-left" aria-label="Ativar animação especial da turma">
+                            Turma 8C 🐻
                         </button>
                     </div>
                 </div>
 
-                <!-- Botões Administrativos -->
+                <!-- Controles Admin -->
                 <div class="flex items-center gap-2">
-                    <button id="login-link" onclick="openLoginModal()" class="text-csu-dark hover:text-csu-red font-bold text-sm flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-red-50 transition-all">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg> Admin
+                    <button id="login-link" onclick="openLoginModal()" class="text-slate-600 hover:text-csu-red font-bold text-sm flex items-center gap-2 px-3.5 py-2.5 rounded-xl hover:bg-slate-100 transition-all" aria-label="Acesso Administrativo">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                        <span class="hidden sm:inline">Admin</span>
                     </button>
-                    <button id="logout-btn" onclick="logout()" class="hidden text-csu-dark hover:text-white font-bold text-sm flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-csu-dark transition-all">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" /></svg> Sair
+                    <button id="logout-btn" onclick="logout()" class="hidden text-slate-600 hover:text-white font-bold text-sm flex items-center gap-2 px-3.5 py-2.5 rounded-xl hover:bg-csu-dark transition-all" aria-label="Sair do modo administrador">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" /></svg>
+                        <span class="hidden sm:inline">Sair</span>
                     </button>
                 </div>
 
@@ -121,149 +130,196 @@
     </header>
 
     <!-- ==========================================
-         MENU DE NAVEGAÇÃO POR ABAS
+         MENU DE NAVEGAÇÃO
          ========================================== -->
-    <nav class="bg-white border-b border-red-100 sticky top-[68px] sm:top-[77px] z-30 shadow-sm">
-        <div class="max-w-5xl mx-auto px-4">
-            <div class="flex gap-2 sm:gap-4 overflow-x-auto no-scrollbar py-2">
-                <button onclick="switchTab('tarefas')" id="tab-tarefas" class="tab-btn px-4 py-2.5 text-sm font-bold rounded-xl transition-all whitespace-nowrap bg-csu-red text-white shadow-md shadow-red-200">
-                    📝 Tarefas
+    <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200/60 sticky top-[68px] sm:top-[81px] z-30" aria-label="Navegação Principal">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex gap-2 overflow-x-auto no-scrollbar py-3" role="tablist">
+                <button onclick="switchTab('tarefas')" id="tab-tarefas" role="tab" aria-selected="true" aria-controls="content-tarefas" class="tab-btn px-5 py-2.5 text-sm font-bold rounded-xl transition-all whitespace-nowrap bg-csu-red text-white shadow-float">
+                    📝 Tarefas Diárias
                 </button>
-                <button onclick="switchTab('calendario')" id="tab-calendario" class="tab-btn px-4 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-gray-500 hover:bg-red-50 hover:text-csu-red">
-                    📆 Provas
+                <button onclick="switchTab('calendario')" id="tab-calendario" role="tab" aria-selected="false" aria-controls="content-calendario" class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+                    📆 Provas & Trabalhos
                 </button>
-                <button onclick="switchTab('avisos')" id="tab-avisos" class="tab-btn px-4 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-gray-500 hover:bg-red-50 hover:text-csu-red">
-                    📢 Avisos
-                </button>
-                <button onclick="switchTab('links')" id="tab-links" class="tab-btn px-4 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-gray-500 hover:bg-red-50 hover:text-csu-red">
-                    🔗 Links Úteis
+                <button onclick="switchTab('avisos')" id="tab-avisos" role="tab" aria-selected="false" aria-controls="content-avisos" class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+                    📢 Mural de Avisos
                 </button>
             </div>
         </div>
     </nav>
 
     <!-- ==========================================
-         CONTEÚDO PRINCIPAL (TELA CENTRAL)
+         CONTEÚDO PRINCIPAL
          ========================================== -->
-    <main class="max-w-5xl w-full mx-auto px-4 py-6 flex-grow">
+    <main class="max-w-6xl w-full mx-auto px-4 py-8 flex-grow">
         
         <!-- ==================================
-             ABA 1: TAREFAS DIÁRIAS
+             ABA 1: TAREFAS (COM LINKS INTEGRADOS)
              ================================== -->
-        <section id="content-tarefas" class="tab-content block space-y-6">
-            
-            <!-- Barra de Data e Filtro -->
-            <div class="bg-white rounded-2xl border border-red-100 shadow-sm p-4">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-1.5 sm:gap-2">
-                        <button onclick="prevDay()" class="p-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-csu-dark transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                        </button>
-                        <div class="text-center min-w-[180px] sm:min-w-[220px]">
-                            <p id="current-date" class="font-bold text-csu-dark text-sm sm:text-base uppercase tracking-wide"></p>
+        <section id="content-tarefas" role="tabpanel" class="tab-content block animate-[fadeIn_0.3s_ease]">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Coluna Principal: Tarefas -->
+                <div class="lg:col-span-8 space-y-6">
+                    
+                    <!-- Barra de Controle de Data e Filtro -->
+                    <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 border border-slate-100">
+                        <div class="flex items-center bg-slate-50 rounded-xl p-1 border border-slate-200">
+                            <button onclick="prevDay()" class="p-2 rounded-lg hover:bg-white hover:shadow-sm text-slate-600 transition-all" aria-label="Dia Anterior">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                            </button>
+                            <div class="text-center min-w-[180px] sm:min-w-[200px] px-2">
+                                <p id="current-date" class="font-bold text-csu-dark text-sm sm:text-base tracking-wide" aria-live="polite"></p>
+                            </div>
+                            <button onclick="nextDay()" class="p-2 rounded-lg hover:bg-white hover:shadow-sm text-slate-600 transition-all" aria-label="Próximo Dia">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            </button>
                         </div>
-                        <button onclick="nextDay()" class="p-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-csu-dark transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                        </button>
-                        <button onclick="goToToday()" class="px-3.5 py-2 text-sm bg-red-100 hover:bg-red-200 text-csu-red rounded-xl transition-colors font-bold ml-2">Hoje</button>
+                        
+                        <div class="flex items-center gap-3 w-full sm:w-auto">
+                            <button onclick="goToToday()" class="hidden sm:block px-4 py-2.5 text-sm bg-red-50 hover:bg-red-100 text-csu-accent rounded-xl transition-colors font-bold whitespace-nowrap">Ir para Hoje</button>
+                            <div class="relative w-full sm:w-auto">
+                                <select id="materia-filter" onchange="filterByMateria(this.value)" class="w-full sm:w-48 appearance-none bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 pr-10 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-csu-red focus:border-csu-red outline-none cursor-pointer" aria-label="Filtrar por matéria">
+                                    <option value="todas">Todas as matérias</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 w-full md:w-auto">
-                        <label for="materia-filter" class="text-xs font-bold text-gray-500 uppercase">Filtrar:</label>
-                        <select id="materia-filter" onchange="filterByMateria(this.value)" class="w-full md:w-auto border border-gray-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-csu-red focus:outline-none bg-white font-medium">
-                            <option value="todas">Todas</option>
-                        </select>
+
+                    <!-- Lista de Tarefas -->
+                    <div id="tarefas-container" class="space-y-5 min-h-[300px]" aria-live="polite">
+                        <!-- Carregando / Tarefas aqui via JS -->
+                    </div>
+
+                    <!-- Formulário Admin de TAREFAS -->
+                    <div id="admin-tarefas-form" class="hidden mt-10 bg-white border border-slate-200 rounded-2xl shadow-soft overflow-hidden">
+                        <div class="bg-slate-800 px-6 py-4 border-b border-slate-700">
+                            <h2 class="text-white font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+                                <svg class="w-5 h-5 text-csu-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                Adicionar Nova Tarefa
+                            </h2>
+                        </div>
+                        <form onsubmit="addTarefa(event)" class="p-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                                <div>
+                                    <label for="tarefa-data" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Data de Entrega *</label>
+                                    <input type="date" id="tarefa-data" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700 font-medium">
+                                </div>
+                                <div>
+                                    <label for="tarefa-materia" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Matéria *</label>
+                                    <input type="text" id="tarefa-materia" required placeholder="Ex: Matemática" list="materias-list" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700 font-medium">
+                                    <datalist id="materias-list">
+                                        <option value="Matemática"><option value="Português"><option value="História"><option value="Geografia"><option value="Ciências"><option value="Inglês"><option value="Arte"><option value="Educação Física"><option value="Educação Financeira"><option value="Projeto Olímpico"><option value="ESE"><option value="Ensino Religioso"><option value="Filosofia"><option value="Redação">
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="mb-5">
+                                <label for="tarefa-descricao" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">O que é para fazer? *</label>
+                                <input type="text" id="tarefa-descricao" required placeholder="Ex: Exercícios da página 45 a 47" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700">
+                            </div>
+                            <div class="mb-6">
+                                <label for="tarefa-link" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Link de Apoio (Opcional)</label>
+                                <input type="url" id="tarefa-link" placeholder="https://..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700">
+                            </div>
+                            <button type="submit" class="w-full sm:w-auto px-8 bg-csu-red hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md focus:ring-4 focus:ring-red-200">Publicar Tarefa</button>
+                        </form>
                     </div>
                 </div>
-            </div>
 
-            <!-- Listagem de Tarefas -->
-            <div id="tarefas-container" class="space-y-4"></div>
+                <!-- Coluna Lateral: Links e Ferramentas (Agora integrados aqui!) -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-white rounded-2xl shadow-soft p-6 border border-slate-100 sticky top-[160px]">
+                        <h3 class="text-base font-black text-csu-dark mb-5 flex items-center gap-2">
+                            <span>🚀</span> Acesso Rápido
+                        </h3>
+                        
+                        <div class="flex flex-col gap-3">
+                            <!-- Link Principal do Site -->
+                            <a href="#" target="_blank" class="group relative overflow-hidden bg-slate-800 text-white p-4 rounded-xl flex items-center gap-4 hover:bg-slate-900 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2">
+                                <div class="absolute right-0 top-0 w-24 h-24 bg-white/5 rounded-full blur-xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
+                                <div class="bg-white/10 p-2.5 rounded-lg">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>
+                                </div>
+                                <div class="relative z-10">
+                                    <h4 class="font-bold text-sm tracking-wide">Site Oficial 8C</h4>
+                                    <p class="text-xs text-slate-300 mt-0.5">Acesse materiais extras</p>
+                                </div>
+                                <svg class="w-5 h-5 ml-auto text-slate-400 group-hover:text-white transition-colors group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                            </a>
 
-            <!-- Formulário Admin de TAREFAS -->
-            <div id="admin-tarefas-form" class="hidden mt-8 border border-red-200 rounded-2xl shadow-lg overflow-hidden">
-                <div class="bg-csu-dark px-6 py-4">
-                    <h2 class="text-white font-bold text-sm uppercase tracking-wide flex items-center gap-2">
-                        <span>➕</span> Painel Admin: Nova Tarefa
-                    </h2>
+                            <div class="h-px w-full bg-slate-100 my-2"></div>
+
+                            <!-- Outros Links -->
+                            <a href="https://classroom.google.com" target="_blank" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all text-slate-700 font-medium text-sm group">
+                                <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center group-hover:scale-105 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg></div>
+                                Google Classroom
+                            </a>
+                            <a href="https://drive.google.com" target="_blank" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all text-slate-700 font-medium text-sm group">
+                                <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg></div>
+                                Drive da Turma
+                            </a>
+                            <a href="https://photos.google.com" target="_blank" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all text-slate-700 font-medium text-sm group">
+                                <div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-105 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                                Galeria de Fotos
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <form onsubmit="addTarefa(event)" class="bg-white p-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Data *</label>
-                            <input type="date" id="tarefa-data" required class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-csu-red outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Matéria *</label>
-                            <input type="text" id="tarefa-materia" required placeholder="Ex: Matemática" list="materias-list" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-csu-red outline-none">
-                            <datalist id="materias-list">
-                                <option value="Matemática"><option value="Português"><option value="História"><option value="Geografia">
-                                <option value="Ciências"><option value="Inglês"><option value="Arte"><option value="Educação Física">
-                                <option value="Educação Financeira"><option value="Projeto Olímpico"><option value="ESE">
-                                <option value="Ensino Religioso"><option value="Filosofia"><option value="Redação">
-                            </datalist>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Descrição do Dever *</label>
-                        <input type="text" id="tarefa-descricao" required placeholder="Página 10 a 15" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-csu-red outline-none">
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Link (Opcional)</label>
-                        <input type="url" id="tarefa-link" placeholder="https://..." class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-csu-red outline-none">
-                    </div>
-                    <button type="submit" class="w-full bg-csu-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-all shadow-md">Postar Tarefa</button>
-                </form>
             </div>
         </section>
 
         <!-- ==================================
              ABA 2: CALENDÁRIO DE PROVAS
              ================================== -->
-        <section id="content-calendario" class="tab-content hidden space-y-6">
-            <div class="bg-white rounded-2xl border border-red-100 shadow-sm p-4 sm:p-6">
+        <section id="content-calendario" role="tabpanel" class="tab-content hidden animate-[fadeIn_0.3s_ease]">
+            <div class="bg-white rounded-3xl shadow-soft p-5 sm:p-8 border border-slate-100 max-w-4xl mx-auto">
                 
                 <!-- Controle do Mês -->
-                <div class="flex items-center justify-between mb-6">
-                    <button onclick="changeMonth(-1)" class="p-2 bg-stone-100 rounded-xl hover:bg-stone-200 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                <div class="flex items-center justify-between mb-8">
+                    <button onclick="changeMonth(-1)" class="p-2 sm:p-3 bg-slate-50 rounded-xl hover:bg-slate-100 text-slate-600 transition-colors focus:ring-2 focus:ring-csu-red" aria-label="Mês Anterior">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                     </button>
-                    <h2 id="calendar-month-display" class="text-lg font-black uppercase tracking-widest text-csu-dark">Mês / Ano</h2>
-                    <button onclick="changeMonth(1)" class="p-2 bg-stone-100 rounded-xl hover:bg-stone-200 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    <h2 id="calendar-month-display" class="text-xl sm:text-2xl font-black uppercase tracking-widest text-csu-dark" aria-live="polite">Mês / Ano</h2>
+                    <button onclick="changeMonth(1)" class="p-2 sm:p-3 bg-slate-50 rounded-xl hover:bg-slate-100 text-slate-600 transition-colors focus:ring-2 focus:ring-csu-red" aria-label="Próximo Mês">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                     </button>
                 </div>
 
                 <!-- Grade do Calendário -->
-                <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2">
-                    <div class="text-center text-xs font-bold text-gray-400">DOM</div><div class="text-center text-xs font-bold text-gray-400">SEG</div>
-                    <div class="text-center text-xs font-bold text-gray-400">TER</div><div class="text-center text-xs font-bold text-gray-400">QUA</div>
-                    <div class="text-center text-xs font-bold text-gray-400">QUI</div><div class="text-center text-xs font-bold text-gray-400">SEX</div>
-                    <div class="text-center text-xs font-bold text-gray-400">SÁB</div>
+                <div class="grid grid-cols-7 gap-2 sm:gap-4 mb-3">
+                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">DOM</div><div class="text-center text-xs font-black text-slate-400 tracking-wider">SEG</div>
+                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">TER</div><div class="text-center text-xs font-black text-slate-400 tracking-wider">QUA</div>
+                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">QUI</div><div class="text-center text-xs font-black text-slate-400 tracking-wider">SEX</div>
+                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">SÁB</div>
                 </div>
-                <div id="calendar-grid" class="grid grid-cols-7 gap-1 sm:gap-2 auto-rows-fr">
+                <div id="calendar-grid" class="grid grid-cols-7 gap-2 sm:gap-4 auto-rows-fr">
                     <!-- Dias gerados via JS -->
                 </div>
             </div>
 
             <!-- Formulário Admin de PROVAS -->
-            <div id="admin-provas-form" class="hidden border border-red-200 rounded-2xl shadow-lg overflow-hidden">
-                <div class="bg-csu-dark px-6 py-4">
-                    <h2 class="text-white font-bold text-sm uppercase tracking-wide flex items-center gap-2">
-                        <span>📝</span> Agendar Nova Prova/Trabalho
+            <div id="admin-provas-form" class="hidden mt-10 max-w-4xl mx-auto bg-white border border-slate-200 rounded-2xl shadow-soft overflow-hidden">
+                <div class="bg-slate-800 px-6 py-4 border-b border-slate-700">
+                    <h2 class="text-white font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        Agendar Prova / Trabalho
                     </h2>
                 </div>
-                <form onsubmit="addProva(event)" class="bg-white p-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <form onsubmit="addProva(event)" class="p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
                         <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Data *</label>
-                            <input type="date" id="prova-data" required class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:ring-csu-red outline-none">
+                            <label for="prova-data" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Data da Avaliação *</label>
+                            <input type="date" id="prova-data" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all font-medium text-slate-700">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Matéria/Assunto *</label>
-                            <input type="text" id="prova-materia" required placeholder="Ex: Prova de História" class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:ring-csu-red outline-none">
+                            <label for="prova-materia" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Matéria e Descrição *</label>
+                            <input type="text" id="prova-materia" required placeholder="Ex: Prova de História - Cap. 4 e 5" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700">
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-csu-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-all shadow-md">Adicionar ao Calendário</button>
+                    <button type="submit" class="w-full sm:w-auto px-8 bg-slate-800 hover:bg-black text-white font-bold py-3.5 rounded-xl transition-all shadow-md focus:ring-4 focus:ring-slate-300">Adicionar ao Calendário</button>
                 </form>
             </div>
         </section>
@@ -271,127 +327,99 @@
         <!-- ==================================
              ABA 3: AVISOS
              ================================== -->
-        <section id="content-avisos" class="tab-content hidden space-y-6">
-            
-            <div class="bg-white rounded-2xl border border-red-100 shadow-sm p-6">
-                <h3 class="text-lg font-black text-csu-dark mb-4 flex items-center gap-2 uppercase tracking-wide">
-                    <span>📢</span> Quadro de Avisos
-                </h3>
-                <div class="space-y-4" id="avisos-container">
+        <section id="content-avisos" role="tabpanel" class="tab-content hidden animate-[fadeIn_0.3s_ease]">
+            <div class="max-w-4xl mx-auto space-y-6">
+                
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-xl font-black text-csu-dark flex items-center gap-2 uppercase tracking-wide">
+                        <span class="text-csu-accent">📢</span> Mural da Turma
+                    </h3>
+                </div>
+
+                <div id="avisos-container" class="grid gap-5" aria-live="polite">
                     <!-- Avisos gerados via JS -->
                 </div>
-            </div>
 
-            <!-- Formulário Admin de AVISOS -->
-            <div id="admin-avisos-form" class="hidden border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-                <div class="bg-csu-dark px-6 py-4">
-                    <h2 class="text-white font-bold text-sm uppercase tracking-wide">➕ Postar Novo Aviso</h2>
-                </div>
-                <form onsubmit="addAviso(event)" class="bg-white p-6">
-                    <div class="mb-4">
-                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Título do Aviso *</label>
-                        <input type="text" id="aviso-titulo" required placeholder="Ex: Reunião de Pais" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-csu-red outline-none">
+                <!-- Formulário Admin de AVISOS -->
+                <div id="admin-avisos-form" class="hidden mt-10 bg-white border border-slate-200 rounded-2xl shadow-soft overflow-hidden">
+                    <div class="bg-slate-800 px-6 py-4 border-b border-slate-700">
+                        <h2 class="text-white font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
+                            Fixar Novo Aviso
+                        </h2>
                     </div>
-                    <div class="mb-6">
-                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Conteúdo do Aviso *</label>
-                        <textarea id="aviso-texto" required rows="3" placeholder="Escreva o aviso aqui..." class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-csu-red outline-none"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-csu-red hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-md">Publicar Aviso</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- ==================================
-             ABA 4: LINKS ÚTEIS
-             ================================== -->
-        <section id="content-links" class="tab-content hidden space-y-6">
-            <div class="bg-white rounded-2xl border border-red-100 shadow-sm p-6">
-                <h3 class="text-lg font-black text-csu-dark mb-6 uppercase tracking-wide">🔗 Links e Plataformas</h3>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    
-                    <!-- Card YouTube -->
-                    <a href="https://youtube.com" target="_blank" class="group p-5 rounded-2xl border-2 border-stone-100 hover:border-red-500 hover:bg-red-50 transition-all flex flex-col items-center text-center">
-                        <div class="w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">▶️</div>
-                        <h4 class="font-bold text-csu-dark">YouTube</h4>
-                        <p class="text-xs text-gray-500 mt-1">Aulas e Videoaulas</p>
-                    </a>
-
-                    <!-- Card Google Docs -->
-                    <a href="https://docs.google.com" target="_blank" class="group p-5 rounded-2xl border-2 border-stone-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex flex-col items-center text-center">
-                        <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">📝</div>
-                        <h4 class="font-bold text-csu-dark">Google Docs</h4>
-                        <p class="text-xs text-gray-500 mt-1">Trabalhos da Turma</p>
-                    </a>
-
-                    <!-- Card PDFs -->
-                    <a href="https://drive.google.com" target="_blank" class="group p-5 rounded-2xl border-2 border-stone-100 hover:border-orange-500 hover:bg-orange-50 transition-all flex flex-col items-center text-center">
-                        <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">📄</div>
-                        <h4 class="font-bold text-csu-dark">Apostilas PDF</h4>
-                        <p class="text-xs text-gray-500 mt-1">Material Didático</p>
-                    </a>
-
-                    <!-- Card Fotos -->
-                    <a href="https://photos.google.com" target="_blank" class="group p-5 rounded-2xl border-2 border-stone-100 hover:border-emerald-500 hover:bg-emerald-50 transition-all flex flex-col items-center text-center">
-                        <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">📸</div>
-                        <h4 class="font-bold text-csu-dark">Fotos da Turma</h4>
-                        <p class="text-xs text-gray-500 mt-1">Galeria do 8C</p>
-                    </a>
-
+                    <form onsubmit="addAviso(event)" class="p-6">
+                        <div class="mb-5">
+                            <label for="aviso-titulo" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Título *</label>
+                            <input type="text" id="aviso-titulo" required placeholder="Ex: Aviso Importante sobre Excursão" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-800 font-bold">
+                        </div>
+                        <div class="mb-6">
+                            <label for="aviso-texto" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Mensagem *</label>
+                            <textarea id="aviso-texto" required rows="4" placeholder="Escreva os detalhes aqui..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700 resize-y"></textarea>
+                        </div>
+                        <button type="submit" class="w-full sm:w-auto px-8 bg-csu-red hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-md focus:ring-4 focus:ring-red-200 transition-all">Fixar no Mural</button>
+                    </form>
                 </div>
+
             </div>
         </section>
 
     </main>
 
     <!-- FOOTER -->
-    <footer class="text-center py-8 bg-csu-dark text-white text-xs mt-auto">
-        <p class="font-bold text-sm tracking-widest mb-1 uppercase">Colégio Santa Úrsula</p>
-        <p class="text-gray-400">Portal Exclusivo Turma 8C © 2026</p>
+    <footer class="mt-auto py-8 bg-slate-900 border-t border-slate-800 text-center" role="contentinfo">
+        <p class="font-bold text-slate-300 text-sm tracking-widest mb-1.5 uppercase">Colégio Santa Úrsula</p>
+        <p class="text-slate-500 text-xs">Portal Exclusivo Turma 8C © 2026</p>
     </footer>
 
 
     <!-- ==========================================
-         MODAIS (LOGIN E DELETAR) E TOAST
+         MODAIS (LOGIN) E TOAST
          ========================================== -->
     
     <!-- Modal de Login -->
-    <div id="login-modal" class="hidden fixed inset-0 bg-csu-dark/80 backdrop-blur-sm items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all">
-            <div class="p-6">
+    <div id="login-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden transform scale-95 transition-transform duration-300" id="login-modal-content">
+            <div class="p-6 sm:p-8">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-black uppercase text-csu-dark">Acesso Admin</h3>
-                    <button onclick="closeLoginModal()" class="text-gray-400 hover:text-csu-red transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    <h3 id="login-title" class="text-xl font-black uppercase text-slate-800 tracking-tight">Acesso Admin</h3>
+                    <button onclick="closeLoginModal()" class="p-2 text-slate-400 hover:text-csu-red hover:bg-red-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-csu-red" aria-label="Fechar modal">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
                 <form onsubmit="doLogin(event)">
-                    <div id="login-error" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-2.5 rounded-xl mb-4 text-xs font-bold"></div>
+                    <div id="login-error" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm font-semibold flex items-center gap-2" role="alert">
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Credenciais incorretas.</span>
+                    </div>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">E-mail</label>
-                            <input type="email" id="login-email" required class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-csu-red outline-none">
+                            <label for="login-email" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">E-mail</label>
+                            <input type="email" id="login-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-colors text-slate-800">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Senha</label>
-                            <input type="password" id="login-password" required class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-csu-red outline-none">
+                            <label for="login-password" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Senha</label>
+                            <input type="password" id="login-password" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-colors text-slate-800">
                         </div>
-                        <button id="login-btn" type="submit" class="w-full bg-csu-dark hover:bg-black text-white font-bold py-3 rounded-xl transition-all shadow-lg mt-2">Entrar</button>
+                        <button id="login-btn" type="submit" class="w-full bg-slate-800 hover:bg-black text-white font-bold py-3.5 rounded-xl transition-all shadow-lg hover:shadow-xl mt-4 focus:ring-4 focus:ring-slate-300">Autenticar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Toast de Notificação -->
-    <div id="toast" class="fixed bottom-4 right-4 bg-csu-dark text-white px-5 py-3 rounded-2xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-sm font-bold flex items-center gap-2"></div>
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3.5 rounded-2xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-sm font-bold flex items-center gap-3 w-max max-w-[90vw]" role="status" aria-live="polite">
+        <span id="toast-icon">ℹ️</span>
+        <span id="toast-msg"></span>
+    </div>
 
 
     <!-- ==========================================
-         ANIMAÇÃO DO URSO (HIDDEN INICIALMENTE)
+         ANIMAÇÃO ESPECIAL DO URSO
          ========================================== -->
-    <div id="bear-animation-container" class="fixed inset-0 z-[100] hidden items-center justify-center pointer-events-none overflow-hidden">
-        <div id="bear-bg" class="absolute inset-0 bg-black/80 backdrop-blur-md opacity-0 transition-opacity duration-500"></div>
+    <div id="bear-animation-container" class="fixed inset-0 z-[100] hidden items-center justify-center pointer-events-none overflow-hidden" aria-hidden="true">
+        <div id="bear-bg" class="absolute inset-0 bg-slate-900/90 backdrop-blur-md opacity-0 transition-opacity duration-500"></div>
         <div id="bear-content" class="relative z-10 flex flex-col items-center opacity-0 scale-0">
             <!-- Estrelas -->
             <div class="flex gap-6 mb-2">
@@ -399,10 +427,10 @@
                 <svg id="star2" class="w-16 h-16 text-yellow-400 opacity-0 -mt-6" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                 <svg id="star3" class="w-12 h-12 text-yellow-400 opacity-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
             </div>
-            <!-- Urso Emoji Gigante -->
-            <div class="text-[140px] leading-none drop-shadow-[0_0_40px_rgba(220,38,38,0.8)]">🐻</div>
+            <!-- Urso Emoji -->
+            <div class="text-[120px] sm:text-[150px] leading-none drop-shadow-[0_0_40px_rgba(220,38,38,0.8)] select-none">🐻</div>
             <!-- Texto Brilhante -->
-            <h2 id="bear-text" class="text-4xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 mt-6 tracking-widest text-center uppercase drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
+            <h2 id="bear-text" class="text-4xl sm:text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-100 to-yellow-300 mt-6 tracking-widest text-center uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
                 Tricampeões<br>do Kahoot!
             </h2>
         </div>
@@ -410,7 +438,7 @@
 
 
     <!-- ==========================================
-         JAVASCRIPT & FIREBASE SDK
+         JAVASCRIPT & FIREBASE
          ========================================== -->
     <script type="module">
         // --- 1. CONFIGURAÇÃO FIREBASE ---
@@ -432,77 +460,74 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
         
-        // Referências do Banco
         const tarefasRef = ref(db, 'tarefas');
         const provasRef = ref(db, 'provas');
         const avisosRef = ref(db, 'avisos');
 
-        // --- 2. ESTADOS GLOBAIS ---
-        let tarefas = [];
-        let provas = [];
-        let avisos = [];
-        let currentDate = new Date(); // Para a aba Tarefas
-        
-        // Variáveis do Calendário
-        let calMonth = new Date().getMonth();
-        let calYear = new Date().getFullYear();
-
-        let isAdmin = false;
-        let mFilter = 'todas';
+        // --- 2. ESTADOS ---
+        let tarefas = []; let provas = []; let avisos = [];
+        let currentDate = new Date();
+        let calMonth = new Date().getMonth(); let calYear = new Date().getFullYear();
+        let isAdmin = false; let mFilter = 'todas';
         const STORAGE_KEY = 'concluidas_8c_csu';
 
-        // Cores das Matérias para Tags
+        // Cores modernizadas para as matérias
         const tagCores = {
-            'Matemática': 'bg-blue-600', 'Português': 'bg-teal-600', 'História': 'bg-amber-600',
-            'Geografia': 'bg-emerald-600', 'Ciências': 'bg-purple-600', 'Inglês': 'bg-pink-600',
-            'Arte': 'bg-fuchsia-600', 'Educação Física': 'bg-orange-600', 
-            'Educação Financeira': 'bg-green-700', 'Projeto Olímpico': 'bg-indigo-600',
-            'ESE': 'bg-cyan-600', 'Ensino Religioso': 'bg-sky-500', 'Filosofia': 'bg-violet-600',
-            'Redação': 'bg-rose-500'
+            'Matemática': 'bg-blue-500/10 text-blue-700 border-blue-200', 'Português': 'bg-teal-500/10 text-teal-700 border-teal-200',
+            'História': 'bg-amber-500/10 text-amber-700 border-amber-200', 'Geografia': 'bg-emerald-500/10 text-emerald-700 border-emerald-200',
+            'Ciências': 'bg-purple-500/10 text-purple-700 border-purple-200', 'Inglês': 'bg-pink-500/10 text-pink-700 border-pink-200',
+            'Arte': 'bg-fuchsia-500/10 text-fuchsia-700 border-fuchsia-200', 'Educação Física': 'bg-orange-500/10 text-orange-700 border-orange-200', 
+            'Educação Financeira': 'bg-green-500/10 text-green-700 border-green-200', 'Projeto Olímpico': 'bg-indigo-500/10 text-indigo-700 border-indigo-200',
+            'ESE': 'bg-cyan-500/10 text-cyan-700 border-cyan-200', 'Ensino Religioso': 'bg-sky-500/10 text-sky-700 border-sky-200',
+            'Filosofia': 'bg-violet-500/10 text-violet-700 border-violet-200', 'Redação': 'bg-rose-500/10 text-rose-700 border-rose-200'
         };
 
-        // --- 3. AUTENTICAÇÃO ---
+        // --- 3. AUTH ---
         onAuthStateChanged(auth, (user) => {
             isAdmin = !!user;
-            updateAdminUI();
-            renderTarefas();
-            renderCalendario();
-            renderAvisos();
+            updateAdminUI(); renderTarefas(); renderCalendario(); renderAvisos();
         });
 
-        // --- 4. FUNÇÕES DE INTERFACE (ABAS E TOAST) ---
+        // --- 4. UI: ABAS E TOAST ---
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(c => { c.classList.add('hidden'); c.classList.remove('block'); });
             document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('bg-csu-red', 'text-white', 'shadow-md', 'shadow-red-200');
-                b.classList.add('text-gray-500', 'hover:bg-red-50', 'hover:text-csu-red');
+                b.setAttribute('aria-selected', 'false');
+                b.classList.remove('bg-csu-red', 'text-white', 'shadow-float');
+                b.classList.add('text-slate-500', 'hover:bg-slate-100', 'hover:text-slate-800');
             });
             document.getElementById(`content-${tabId}`).classList.remove('hidden');
             document.getElementById(`content-${tabId}`).classList.add('block');
             
             const btn = document.getElementById(`tab-${tabId}`);
-            btn.classList.add('bg-csu-red', 'text-white', 'shadow-md', 'shadow-red-200');
-            btn.classList.remove('text-gray-500', 'hover:bg-red-50', 'hover:text-csu-red');
+            btn.setAttribute('aria-selected', 'true');
+            btn.classList.add('bg-csu-red', 'text-white', 'shadow-float');
+            btn.classList.remove('text-slate-500', 'hover:bg-slate-100', 'hover:text-slate-800');
 
             if(tabId === 'calendario') renderCalendario();
         };
 
-        function showToast(msg, type = 'info') {
+        function showToast(msg, type = 'success') {
             const toast = document.getElementById('toast');
-            toast.className = `fixed bottom-4 right-4 ${type === 'error' ? 'bg-red-600' : 'bg-csu-dark'} text-white px-5 py-3 rounded-2xl shadow-xl transform transition-all duration-300 z-50 text-sm font-bold flex items-center gap-2`;
-            toast.textContent = msg;
+            const icon = document.getElementById('toast-icon');
+            const msgEl = document.getElementById('toast-msg');
+            
+            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 ${type === 'error' ? 'bg-red-600' : 'bg-slate-800'} text-white px-6 py-3.5 rounded-2xl shadow-2xl transform transition-all duration-300 z-50 text-sm font-bold flex items-center gap-3 w-max max-w-[90vw]`;
+            icon.textContent = type === 'error' ? '⚠️' : '✅';
+            msgEl.textContent = msg;
+            
             toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3500);
         }
 
-        // --- 5. RENDERIZAÇÃO: TAREFAS ---
+        // --- 5. RENDER: TAREFAS ---
         function dateToString(d) {
             const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const day = String(d.getDate()).padStart(2, '0');
             return `${y}-${m}-${day}`;
         }
         function formatDate(dateStr) {
             const [y, m, d] = dateStr.split('-');
-            const week = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+            const week = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
             const dt = new Date(y, m - 1, d);
             return `${d}/${m}/${y} • ${week[dt.getDay()]}`;
         }
@@ -516,45 +541,36 @@
             if (mFilter !== 'todas') dayTasks = dayTasks.filter(t => t.materia === mFilter);
 
             if (dayTasks.length === 0) {
-                container.innerHTML = `<div class="bg-white rounded-2xl border border-gray-100 p-10 text-center"><p class="text-3xl mb-2">🎉</p><p class="text-csu-dark font-black uppercase tracking-wide">Dia Livre!</p><p class="text-gray-400 text-sm">Nenhuma tarefa para esta data.</p></div>`;
+                container.innerHTML = `<div class="bg-white rounded-2xl border border-slate-100 p-12 text-center shadow-soft flex flex-col items-center justify-center h-full min-h-[300px]">
+                    <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-3xl mb-4 border border-slate-100">🎉</div>
+                    <p class="text-slate-800 font-black uppercase tracking-wide text-lg">Tudo limpo!</p>
+                    <p class="text-slate-500 text-sm mt-1">Nenhuma tarefa registrada para esta data.</p>
+                </div>`;
                 return;
             }
 
-            const grupos = {};
-            dayTasks.forEach(t => { if(!grupos[t.materia]) grupos[t.materia]=[]; grupos[t.materia].push(t); });
-
             let html = '';
-            Object.keys(grupos).sort().forEach(materia => {
-                const badgeColor = tagCores[materia] || 'bg-gray-800';
-                html += `
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-4">
-                        <div class="px-5 py-3 border-b border-gray-50 flex items-center justify-between">
-                            <span class="text-sm font-black uppercase tracking-wide text-csu-dark flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full ${badgeColor}"></span>${materia}
-                            </span>
-                        </div>
-                        <ul class="divide-y divide-gray-50">`;
+            dayTasks.forEach(task => {
+                const checked = (JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')).includes(task.id);
+                const tagStyle = tagCores[task.materia] || 'bg-slate-100 text-slate-700 border-slate-200';
                 
-                grupos[materia].forEach(task => {
-                    const checked = (JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')).includes(task.id);
-                    html += `
-                        <li class="p-4 flex items-start gap-3 hover:bg-stone-50 transition ${checked ? 'opacity-50' : ''}">
-                            <input type="checkbox" ${checked ? 'checked' : ''} onchange="window.toggleConcluida('${task.id}')" class="w-5 h-5 mt-0.5 rounded border-gray-300 text-green-500">
-                            <div class="flex-grow">
-                                <p class="text-sm font-medium text-csu-dark ${checked ? 'line-through text-gray-400' : ''}">${task.descricao}</p>
-                            </div>
-                            <div class="flex gap-2">
-                                ${task.link ? `<a href="${task.link}" target="_blank" class="text-blue-500 hover:bg-blue-50 p-1.5 rounded-lg transition">🔗</a>` : ''}
-                                ${isAdmin ? `<button onclick="window.excluirItem('tarefas', '${task.id}')" class="text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition">🗑️</button>` : ''}
-                            </div>
-                        </li>`;
-                });
-                html += '</ul></div>';
+                html += `
+                    <div class="bg-white rounded-2xl border border-slate-100 shadow-soft p-5 flex items-start gap-4 transition-all hover:shadow-md ${checked ? 'opacity-60 bg-slate-50' : ''}">
+                        <div class="pt-1 flex-shrink-0">
+                            <input type="checkbox" ${checked ? 'checked' : ''} onchange="window.toggleConcluida('${task.id}')" aria-label="Marcar como concluída" class="focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <span class="inline-block px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wider border ${tagStyle} mb-2">${task.materia}</span>
+                            <p class="text-sm sm:text-base font-semibold text-slate-800 ${checked ? 'line-through text-slate-500' : ''}">${task.descricao}</p>
+                            ${task.link ? `<a href="${task.link}" target="_blank" class="inline-flex items-center gap-1.5 mt-3 text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors w-fit"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg> Material de Apoio</a>` : ''}
+                        </div>
+                        ${isAdmin ? `<div class="flex-shrink-0"><button onclick="window.excluirItem('tarefas', '${task.id}')" aria-label="Excluir tarefa" class="text-slate-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div>` : ''}
+                    </div>`;
             });
             container.innerHTML = html;
         };
 
-        // --- 6. RENDERIZAÇÃO: CALENDÁRIO ---
+        // --- 6. RENDER: CALENDÁRIO ---
         window.changeMonth = function(dir) {
             calMonth += dir;
             if (calMonth < 0) { calMonth = 11; calYear--; }
@@ -571,64 +587,63 @@
             const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
             
             let html = '';
-            // Dias vazios
-            for(let i=0; i<firstDay; i++) { html += `<div class="bg-transparent rounded-xl p-2 h-20 sm:h-24"></div>`; }
+            for(let i=0; i<firstDay; i++) { html += `<div class="bg-transparent rounded-xl p-2 h-24 sm:h-28"></div>`; }
             
-            // Dias do mês
             for(let d=1; d<=daysInMonth; d++) {
                 const dStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
                 const diaHoje = dateToString(new Date()) === dStr;
-                
-                // Buscar provas deste dia
                 const provasDoDia = provas.filter(p => p.data === dStr);
                 
                 let provasHtml = '';
                 provasDoDia.forEach(p => {
-                    provasHtml += `<div class="bg-csu-red text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded flex justify-between items-center mb-1 leading-tight truncate" title="${p.materia}">
-                        <span class="truncate">${p.materia}</span>
-                        ${isAdmin ? `<span onclick="window.excluirItem('provas', '${p.id}')" class="ml-1 cursor-pointer text-white/70 hover:text-white">×</span>` : ''}
+                    provasHtml += `<div class="bg-csu-red text-white text-[10px] sm:text-xs font-bold px-2 py-1.5 rounded-lg flex justify-between items-center mb-1.5 leading-tight shadow-sm group">
+                        <span class="truncate pr-1" title="${p.materia}">${p.materia}</span>
+                        ${isAdmin ? `<button onclick="window.excluirItem('provas', '${p.id}')" aria-label="Excluir prova" class="text-white/60 hover:text-white flex-shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>` : ''}
                     </div>`;
                 });
 
                 html += `
-                    <div class="border ${diaHoje ? 'border-csu-red bg-red-50/30' : 'border-gray-100 bg-white'} rounded-xl p-1.5 sm:p-2 h-20 sm:h-24 flex flex-col overflow-hidden">
-                        <span class="text-xs sm:text-sm font-black ${diaHoje ? 'text-csu-red' : 'text-gray-500'} block mb-1">${d}</span>
+                    <div class="border ${diaHoje ? 'border-csu-accent bg-red-50/20 shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200'} rounded-2xl p-2 sm:p-3 h-24 sm:h-28 flex flex-col overflow-hidden transition-colors">
+                        <span class="text-xs sm:text-sm font-black ${diaHoje ? 'text-csu-red bg-red-100 w-7 h-7 flex items-center justify-center rounded-full' : 'text-slate-400'} mb-2">${d}</span>
                         <div class="flex-grow overflow-y-auto no-scrollbar">${provasHtml}</div>
                     </div>`;
             }
             grid.innerHTML = html;
         };
 
-        // --- 7. RENDERIZAÇÃO: AVISOS ---
+        // --- 7. RENDER: AVISOS ---
         window.renderAvisos = function() {
             const container = document.getElementById('avisos-container');
             if (avisos.length === 0) {
-                container.innerHTML = `<p class="text-gray-400 text-sm">Nenhum aviso no momento.</p>`;
+                container.innerHTML = `<div class="text-center py-10 bg-white border border-slate-100 rounded-2xl shadow-soft"><p class="text-slate-500 text-sm">O mural está vazio no momento.</p></div>`;
                 return;
             }
             
-            // Ordenar avisos (mais novos primeiro, usando ID que é baseado em timestamp)
             const avisosOrdenados = [...avisos].reverse();
-            
             let html = '';
             avisosOrdenados.forEach(av => {
                 html += `
-                    <div class="p-5 rounded-2xl bg-stone-50 border border-gray-100 relative group">
-                        ${isAdmin ? `<button onclick="window.excluirItem('avisos', '${av.id}')" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">🗑️</button>` : ''}
-                        <h4 class="font-black text-csu-dark uppercase tracking-wide text-sm mb-1">${av.titulo}</h4>
-                        <p class="text-sm text-gray-600 whitespace-pre-wrap">${av.texto}</p>
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-soft relative group hover:shadow-md transition-shadow">
+                        ${isAdmin ? `<button onclick="window.excluirItem('avisos', '${av.id}')" aria-label="Excluir aviso" class="absolute top-4 right-4 text-slate-300 hover:text-red-500 bg-slate-50 hover:bg-red-50 p-2 rounded-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>` : ''}
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-csu-accent flex-shrink-0 mt-1">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-black text-slate-800 text-lg mb-2">${av.titulo}</h4>
+                                <p class="text-sm sm:text-base text-slate-600 leading-relaxed whitespace-pre-wrap">${av.texto}</p>
+                            </div>
+                        </div>
                     </div>`;
             });
             container.innerHTML = html;
         };
 
-        // --- 8. LÓGICA DE CRUD E ADMIN ---
+        // --- 8. CRUD E ADMIN ---
         window.excluirItem = async function(tipo, id) {
-            if(!isAdmin || !confirm('Tem certeza que deseja apagar isso?')) return;
-            try {
-                await remove(ref(db, `${tipo}/${id}`));
-                showToast('Apagado com sucesso!');
-            } catch(e) { showToast('Erro ao apagar.', 'error'); }
+            if(!isAdmin || !confirm('Tem certeza que deseja apagar permanentemente este item?')) return;
+            try { await remove(ref(db, `${tipo}/${id}`)); showToast('Item excluído com sucesso.'); } 
+            catch(e) { showToast('Erro ao excluir item.', 'error'); }
         };
 
         window.addTarefa = async function(e) { e.preventDefault(); if(!isAdmin) return;
@@ -636,25 +651,25 @@
             const materia = document.getElementById('tarefa-materia').value;
             const descricao = document.getElementById('tarefa-descricao').value;
             const link = document.getElementById('tarefa-link').value;
-            try { await push(tarefasRef, { data, materia, descricao, link: link||'' }); e.target.reset(); showToast('Tarefa postada!'); } 
-            catch(err) { showToast('Erro.', 'error'); }
+            try { await push(tarefasRef, { data, materia, descricao, link: link||'' }); e.target.reset(); showToast('Tarefa postada com sucesso!'); } 
+            catch(err) { showToast('Erro ao postar.', 'error'); }
         };
 
         window.addProva = async function(e) { e.preventDefault(); if(!isAdmin) return;
             const data = document.getElementById('prova-data').value;
             const materia = document.getElementById('prova-materia').value;
-            try { await push(provasRef, { data, materia }); e.target.reset(); showToast('Prova agendada!'); } 
-            catch(err) { showToast('Erro.', 'error'); }
+            try { await push(provasRef, { data, materia }); e.target.reset(); showToast('Avaliação agendada com sucesso!'); } 
+            catch(err) { showToast('Erro ao agendar.', 'error'); }
         };
 
         window.addAviso = async function(e) { e.preventDefault(); if(!isAdmin) return;
             const titulo = document.getElementById('aviso-titulo').value;
             const texto = document.getElementById('aviso-texto').value;
-            try { await push(avisosRef, { titulo, texto }); e.target.reset(); showToast('Aviso publicado!'); } 
-            catch(err) { showToast('Erro.', 'error'); }
+            try { await push(avisosRef, { titulo, texto }); e.target.reset(); showToast('Aviso fixado no mural!'); } 
+            catch(err) { showToast('Erro ao postar.', 'error'); }
         };
 
-        // --- 9. AUXILIARES DE TAREFAS ---
+        // --- 9. AUXILIARES ---
         window.prevDay = () => { currentDate.setDate(currentDate.getDate()-1); renderTarefas(); };
         window.nextDay = () => { currentDate.setDate(currentDate.getDate()+1); renderTarefas(); };
         window.goToToday = () => { currentDate = new Date(); renderTarefas(); };
@@ -673,7 +688,7 @@
             mats.forEach(m => select.innerHTML += `<option value="${m}" ${mFilter===m?'selected':''}>${m}</option>`);
         }
 
-        // --- 10. CONTROLE ADMIN ---
+        // --- 10. MODAL E AUTENTICAÇÃO ---
         function updateAdminUI() {
             document.getElementById('login-link').classList.toggle('hidden', isAdmin);
             document.getElementById('logout-btn').classList.toggle('hidden', !isAdmin);
@@ -682,93 +697,95 @@
             document.getElementById('admin-avisos-form').classList.toggle('hidden', !isAdmin);
         }
 
-        window.openLoginModal = () => { document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('login-modal').classList.add('flex'); };
-        window.closeLoginModal = () => { document.getElementById('login-modal').classList.add('hidden'); document.getElementById('login-modal').classList.remove('flex'); };
+        window.openLoginModal = () => { 
+            const m = document.getElementById('login-modal'); const c = document.getElementById('login-modal-content');
+            m.classList.remove('hidden'); m.classList.add('flex');
+            setTimeout(() => { m.classList.remove('opacity-0'); c.classList.remove('scale-95'); }, 10);
+            document.getElementById('login-email').focus();
+        };
+        window.closeLoginModal = () => { 
+            const m = document.getElementById('login-modal'); const c = document.getElementById('login-modal-content');
+            m.classList.add('opacity-0'); c.classList.add('scale-95');
+            setTimeout(() => { m.classList.add('hidden'); m.classList.remove('flex'); }, 300);
+            document.getElementById('login-error').classList.add('hidden');
+        };
         window.doLogin = async (e) => {
             e.preventDefault();
             const em = document.getElementById('login-email').value; const pw = document.getElementById('login-password').value;
-            const btn = document.getElementById('login-btn'); btn.textContent = '...';
-            try { await signInWithEmailAndPassword(auth, em, pw); closeLoginModal(); showToast('Bem-vindo Admin!'); }
-            catch(err) { document.getElementById('login-error').classList.remove('hidden'); document.getElementById('login-error').textContent = 'Erro de acesso.'; }
-            finally { btn.textContent = 'Entrar'; }
+            const btn = document.getElementById('login-btn'); btn.textContent = 'Autenticando...'; btn.disabled = true;
+            try { await signInWithEmailAndPassword(auth, em, pw); closeLoginModal(); showToast('Acesso administrativo liberado.'); e.target.reset(); }
+            catch(err) { document.getElementById('login-error').classList.remove('hidden'); }
+            finally { btn.textContent = 'Autenticar'; btn.disabled = false; }
         };
-        window.logout = async () => { await signOut(auth); showToast('Sessão encerrada.'); };
+        window.logout = async () => { await signOut(auth); showToast('Sessão administrativa encerrada.'); };
 
-        // --- 11. OUVINTES DO FIREBASE EM TEMPO REAL ---
+        // Fechar modal ao clicar fora
+        document.getElementById('login-modal').addEventListener('click', (e) => {
+            if(e.target === document.getElementById('login-modal')) closeLoginModal();
+        });
+
+        // --- 11. FIREBASE REALTIME ---
         onValue(tarefasRef, (snap) => { const d=snap.val(); tarefas = d?Object.keys(d).map(k=>({id:k,...d[k]})):[]; updateMateriaFilter(); renderTarefas(); });
         onValue(provasRef, (snap) => { const d=snap.val(); provas = d?Object.keys(d).map(k=>({id:k,...d[k]})):[]; renderCalendario(); });
         onValue(avisosRef, (snap) => { const d=snap.val(); avisos = d?Object.keys(d).map(k=>({id:k,...d[k]})):[]; renderAvisos(); });
 
-        // --- 12. ANIMAÇÃO COMPLEXA (URSO E ESTRELAS) ---
+        // --- 12. ANIMAÇÃO DE CONFETES E URSO ---
         window.triggerBearAnimation = function() {
             const container = document.getElementById('bear-animation-container');
             const bg = document.getElementById('bear-bg');
             const content = document.getElementById('bear-content');
             const bearText = document.getElementById('bear-text');
-            const s1 = document.getElementById('star1');
-            const s2 = document.getElementById('star2');
-            const s3 = document.getElementById('star3');
+            const s1 = document.getElementById('star1'); const s2 = document.getElementById('star2'); const s3 = document.getElementById('star3');
 
-            // Mostrar container
-            container.classList.remove('hidden');
-            container.classList.add('flex');
+            container.classList.remove('hidden'); container.classList.add('flex');
             
-            // Ativar BG e Urso
-            setTimeout(() => bg.classList.remove('opacity-0'), 50);
+            // Força um reflow para garantir que a animação reinicie se chamada novamente
+            void container.offsetWidth;
+
+            setTimeout(() => bg.classList.remove('opacity-0'), 10);
             content.classList.add('anim-bear');
-            
-            // Ativar Estrelas
-            s1.classList.add('anim-star-1');
-            s2.classList.add('anim-star-2');
-            s3.classList.add('anim-star-3');
-
-            // Ativar Texto Brilhante
+            s1.classList.add('anim-star-1'); s2.classList.add('anim-star-2'); s3.classList.add('anim-star-3');
             bearText.classList.add('anim-text');
 
-            // Gerar Confetes Complexos
             createConfetti(container);
 
-            // Desmontar após 6 segundos
             setTimeout(() => {
                 bg.classList.add('opacity-0');
                 content.classList.remove('anim-bear');
                 s1.classList.remove('anim-star-1'); s2.classList.remove('anim-star-2'); s3.classList.remove('anim-star-3');
                 bearText.classList.remove('anim-text');
                 
-                // Limpar confetes
-                document.querySelectorAll('.confetti').forEach(c => c.remove());
+                const confettis = document.querySelectorAll('.confetti');
+                confettis.forEach(c => c.remove());
 
-                setTimeout(() => {
-                    container.classList.add('hidden');
-                    container.classList.remove('flex');
-                }, 500);
+                setTimeout(() => { container.classList.add('hidden'); container.classList.remove('flex'); }, 500);
             }, 6000);
         };
 
-        // Gerador de Partículas (Confetes)
         function createConfetti(parent) {
-            const colors = ['#dc2626', '#facc15', '#ffffff', '#000000'];
-            for(let i=0; i<80; i++) {
+            const colors = ['#dc2626', '#facc15', '#ffffff', '#3b82f6', '#10b981'];
+            for(let i=0; i<100; i++) {
                 const conf = document.createElement('div');
                 conf.classList.add('confetti');
-                const size = Math.random() * 8 + 4;
+                const size = Math.random() * 8 + 6;
                 conf.style.width = `${size}px`;
                 conf.style.height = `${size * 2}px`;
                 conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 conf.style.left = `${Math.random() * 100}vw`;
                 
-                // Animação inline com JS
                 const duration = Math.random() * 3 + 2;
-                const delay = Math.random() * 1;
+                const delay = Math.random() * 0.5;
+                const rotation = Math.random() * 720 + 360;
+                const horizontalMovement = Math.random() * 300 - 150;
+                
                 conf.animate([
-                    { transform: `translate3d(0,0,0) rotate(0deg)`, opacity: 1 },
-                    { transform: `translate3d(${Math.random()*200 - 100}px, 100vh, 0) rotate(${Math.random()*720}deg)`, opacity: 0 }
+                    { transform: `translate3d(0,-20px,0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${horizontalMovement}px, 100vh, 0) rotate(${rotation}deg)`, opacity: 0 }
                 ], { duration: duration * 1000, delay: delay * 1000, easing: 'cubic-bezier(.37,0,.63,1)', fill: 'forwards' });
                 
                 parent.appendChild(conf);
             }
         }
-
     </script>
 </body>
 </html>
