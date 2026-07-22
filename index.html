@@ -1,812 +1,1344 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full bg-slate-50 antialiased">
+<html lang="pt-BR" class="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <meta name="theme-color" content="#dc2626">
-    <title>Portal CSU • Turma 8C</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Configuração Tailwind -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        csu: { red: '#dc2626', dark: '#0f172a', light: '#f8fafc', accent: '#ef4444' }
-                    },
-                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-                    boxShadow: {
-                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
-                        'float': '0 10px 30px -5px rgba(220, 38, 38, 0.15)'
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Escolar CSU - Turma 8C</title>
+  
+  <!-- Fonte Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            csu: {
+              red: '#dc2626',
+              redDark: '#b91c1c',
+              dark: '#0f172a',
+              cardDark: '#1e293b',
+              borderDark: '#334155'
             }
+          }
         }
-    </script>
+      }
+    }
+  </script>
+  
+  <!-- Estilos Customizados & Animações -->
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #475569;
+    }
+    
+    /* Skeleton Loading Effect */
+    .skeleton {
+      animation: skeleton-loading 1.5s infinite ease-in-out;
+    }
+    @keyframes skeleton-loading {
+      0% { opacity: 0.5; background-color: #e2e8f0; }
+      50% { opacity: 1; background-color: #cbd5e1; }
+      100% { opacity: 0.5; background-color: #e2e8f0; }
+    }
+    .dark .skeleton {
+      @keyframes skeleton-loading-dark {
+        0% { opacity: 0.5; background-color: #334155; }
+        50% { opacity: 1; background-color: #475569; }
+        100% { opacity: 0.5; background-color: #334155; }
+      }
+      animation: skeleton-loading-dark 1.5s infinite ease-in-out;
+    }
 
-    <style>
-        /* ==========================================
-           BASE, SCROLLBAR E ACESSIBILIDADE
-           ========================================== */
-        * { font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; border: 2px solid #f8fafc; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
-        /* Scrollbar fininha para dentro dos dias do calendário */
-        .styled-scrollbar::-webkit-scrollbar { width: 4px; }
-        .styled-scrollbar::-webkit-scrollbar-thumb { background: #fca5a5; border-radius: 99px; border: none; }
-
-        /* Foco para Acessibilidade */
-        *:focus-visible { outline: 3px solid #dc2626; outline-offset: 2px; border-radius: 4px; }
-
-        /* Checkbox Customizada (Acessível) */
-        input[type="checkbox"] {
-            appearance: none; -webkit-appearance: none;
-            width: 1.5rem; height: 1.5rem;
-            background: #fff; border: 2px solid #cbd5e1; border-radius: 0.375rem;
-            cursor: pointer; transition: all 0.2s ease;
-        }
-        input[type="checkbox"]:hover { border-color: #94a3b8; }
-        input[type="checkbox"]:checked {
-            background-color: #10b981; border-color: #10b981;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E");
-            background-size: 70%; background-position: center; background-repeat: no-repeat;
-        }
-        input[type="checkbox"]:focus-visible { outline: 3px solid #34d399; outline-offset: 2px; }
-
-        /* ==========================================
-           ANIMAÇÕES COMPLEXAS CORRIGIDAS
-           ========================================== */
-        @keyframes bearEntrance {
-            0% { transform: scale(0) translateY(100px); opacity: 0; }
-            60% { transform: scale(1.1) translateY(-10px); opacity: 1; filter: drop-shadow(0 0 40px rgba(220, 38, 38, 0.8)); }
-            100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.5)); opacity: 1; }
-        }
-        @keyframes starPop {
-            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
-            50% { transform: scale(1.5) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 20px rgba(250, 204, 21, 1)); }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.6)); }
-        }
-        @keyframes textShine { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .anim-bear { animation: bearEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        .anim-star-1 { animation: starPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.4s forwards; }
-        .anim-star-2 { animation: starPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s forwards; }
-        .anim-star-3 { animation: starPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.8s forwards; }
-        
-        .anim-text {
-            background-size: 200% auto;
-            opacity: 0;
-            animation: fadeIn 0.5s 1s forwards, textShine 3s linear infinite 1s;
-        }
-
-        .confetti { position: absolute; top: -10px; z-index: 101; pointer-events: none; }
-    </style>
+    /* Urso Kahoot Animation */
+    @keyframes bounce-bear {
+      0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+      25% { transform: translateY(-30px) scale(1.1) rotate(-10deg); }
+      50% { transform: translateY(0) scale(0.95) rotate(10deg); }
+      75% { transform: translateY(-15px) scale(1.05) rotate(-5deg); }
+    }
+    .animate-kahoot-bear {
+      animation: bounce-bear 0.8s infinite ease-in-out;
+    }
+  </style>
 </head>
-<body class="min-h-full flex flex-col text-slate-800 selection:bg-red-200 selection:text-red-900">
+<body class="bg-slate-50 dark:bg-csu-dark text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col font-sans pb-20 md:pb-8">
 
-    <!-- ==========================================
-         HEADER PRINCIPAL (ACESSÍVEL E MODERNO)
-         ========================================== -->
-    <header class="bg-white/80 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-40 shadow-sm" role="banner">
-        <div class="max-w-6xl mx-auto px-4 py-3 sm:py-4">
+  <!-- ==================== NAVEGAÇÃO SUPERIOR / CABEÇALHO ==================== -->
+  <header class="sticky top-0 z-30 bg-white/90 dark:bg-csu-cardDark/90 backdrop-blur-md border-b border-slate-200 dark:border-csu-borderDark shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Logo & Título -->
+      <div class="flex items-center gap-3 shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-csu-red flex items-center justify-center text-white font-black text-xl shadow-md shadow-red-500/20">
+          CSU
+        </div>
+        <div>
+          <h1 class="font-bold text-base sm:text-lg leading-tight text-slate-900 dark:text-white">Colégio Santa Úrsula</h1>
+          <p class="text-xs font-semibold text-csu-red dark:text-red-400">Turma 8°C • Portal Escolar</p>
+        </div>
+      </div>
+
+      <!-- Busca Global -->
+      <div class="hidden md:flex flex-1 max-w-md relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top.1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-sm"></i>
+        <input type="text" id="globalSearchInput" placeholder="Pesquisar tarefas, provas ou avisos..." 
+          class="w-full pl-9 pr-4 py-1.5 text-sm rounded-full border border-slate-200 dark:border-csu-borderDark bg-slate-100 dark:bg-slate-800/80 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-csu-red transition-all">
+        <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+      </div>
+
+      <!-- Ações do Usuário & Perfil -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Easter Egg Kahoot Bear Button -->
+        <button id="kahootBtn" title="Urso Tricampeão do Kahoot!" class="p-2 rounded-xl text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/30 transition-transform active:scale-95">
+          <i class="fa-solid fa-trophy text-lg"></i>
+        </button>
+
+        <!-- Toggle Modo Escuro -->
+        <button id="themeToggle" title="Alternar Modo Escuro" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+        </button>
+
+        <!-- Perfil do Aluno -->
+        <button id="profileBtn" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-xs font-semibold">
+          <i class="fa-solid fa-circle-user text-base text-csu-red"></i>
+          <span id="headerStudentName" class="max-w-[100px] truncate">Olá, Aluno</span>
+        </button>
+
+        <!-- Login / Admin -->
+        <button id="adminAuthBtn" class="px-3 py-1.5 rounded-xl bg-csu-red text-white text-xs font-bold hover:bg-csu-redDark transition-all shadow-sm flex items-center gap-1.5">
+          <i class="fa-solid fa-lock text-xs"></i>
+          <span id="adminAuthText">Admin</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Search Input Bar -->
+    <div class="md:hidden px-4 pb-3">
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+        <input type="text" id="globalSearchInputMobile" placeholder="Pesquisar em todo o portal..." 
+          class="w-full pl-9 pr-4 py-1.5 text-sm rounded-full border border-slate-200 dark:border-csu-borderDark bg-slate-100 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-csu-red">
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MENU DE NAVEGAÇÃO PRINCIPAL (DESKTOP) ==================== -->
+  <nav class="hidden md:block bg-white dark:bg-csu-cardDark border-b border-slate-200 dark:border-csu-borderDark">
+    <div class="max-w-7xl mx-auto px-4 flex space-x-1">
+      <button class="tab-btn active px-4 py-3 text-sm font-semibold border-b-2 border-csu-red text-csu-red flex items-center gap-2" data-tab="tab-tarefas">
+        <i class="fa-solid fa-list-check"></i> Tarefas Diárias
+      </button>
+      <button class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 flex items-center gap-2" data-tab="tab-semanal">
+        <i class="fa-solid fa-calendar-week"></i> Visão Semanal
+      </button>
+      <button class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 flex items-center gap-2" data-tab="tab-provas">
+        <i class="fa-solid fa-graduation-cap"></i> Calendário de Provas
+      </button>
+      <button class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 flex items-center gap-2" data-tab="tab-avisos">
+        <i class="fa-solid fa-bullhorn"></i> Mural de Avisos
+      </button>
+      <button class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 flex items-center gap-2" data-tab="tab-historico">
+        <i class="fa-solid fa-clock-rotate-left"></i> Histórico
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- BANNER DE LEMBRETE DO DIA SEGUINTE -->
+    <div id="tomorrowReminderBanner" class="hidden mb-6 p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 flex items-start gap-3 shadow-sm">
+      <i class="fa-solid fa-bell text-amber-600 dark:text-amber-400 text-lg mt-0.5"></i>
+      <div class="flex-1">
+        <h4 class="font-bold text-sm text-amber-900 dark:text-amber-200">Lembrete para amanhã!</h4>
+        <p id="tomorrowReminderText" class="text-xs text-amber-800 dark:text-amber-300 mt-0.5"></p>
+      </div>
+      <button onclick="document.getElementById('tomorrowReminderBanner').classList.add('hidden')" class="text-amber-500 hover:text-amber-700">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- RESULTADOS DA BUSCA GLOBAL -->
+    <section id="searchResultsSection" class="hidden mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold flex items-center gap-2">
+          <i class="fa-solid fa-magnifying-glass text-csu-red"></i> Resultados da Pesquisa
+        </h2>
+        <button id="closeSearchBtn" class="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-white">Limpar Busca</button>
+      </div>
+      <div id="searchResultsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      <hr class="my-8 border-slate-200 dark:border-csu-borderDark">
+    </section>
+
+    <!-- ABA 1: TAREFAS DIÁRIAS -->
+    <section id="tab-tarefas" class="tab-content space-y-6">
+      
+      <!-- PAINEL DE ESTATÍSTICAS -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white dark:bg-csu-cardDark p-4 rounded-2xl border border-slate-200 dark:border-csu-borderDark shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+            <i class="fa-solid fa-clipboard-list text-lg"></i>
+          </div>
+          <div>
+            <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total do Dia</p>
+            <p id="statTotalToday" class="text-xl font-extrabold text-slate-900 dark:text-white">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-csu-cardDark p-4 rounded-2xl border border-slate-200 dark:border-csu-borderDark shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+            <i class="fa-solid fa-circle-check text-lg"></i>
+          </div>
+          <div>
+            <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Concluídas Hoje</p>
+            <p id="statCompletedPct" class="text-xl font-extrabold text-slate-900 dark:text-white">0%</p>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-csu-cardDark p-4 rounded-2xl border border-slate-200 dark:border-csu-borderDark shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
+            <i class="fa-solid fa-hourglass-half text-lg"></i>
+          </div>
+          <div>
+            <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Pendentes</p>
+            <p id="statPendingToday" class="text-xl font-extrabold text-slate-900 dark:text-white">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-csu-cardDark p-4 rounded-2xl border border-slate-200 dark:border-csu-borderDark shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
+            <i class="fa-solid fa-chart-line text-lg"></i>
+          </div>
+          <div>
+            <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Média 7 dias</p>
+            <p id="statAvg7Days" class="text-xl font-extrabold text-slate-900 dark:text-white">0%</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTROLES & NAVEGAÇÃO DE DIA -->
+      <div class="bg-white dark:bg-csu-cardDark p-4 rounded-2xl border border-slate-200 dark:border-csu-borderDark shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+        
+        <!-- Seletor e Navegador de Data -->
+        <div class="flex items-center gap-2 w-full md:w-auto justify-between md:justify-start">
+          <button id="prevDayBtn" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <div class="text-center px-3">
+            <span id="currentDateDisplay" class="font-bold text-sm sm:text-base block">--/--/----</span>
+            <span id="currentDayOfWeekDisplay" class="text-xs font-semibold text-csu-red dark:text-red-400 uppercase tracking-wider block">---</span>
+          </div>
+          <button id="nextDayBtn" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+          <button id="todayBtn" class="ml-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold transition-colors">
+            Hoje
+          </button>
+        </div>
+
+        <!-- Filtros e Ações Rápidas -->
+        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+          <!-- Filtro por Matéria -->
+          <select id="subjectFilter" class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-csu-borderDark bg-slate-50 dark:bg-slate-800 focus:outline-none">
+            <option value="all">Todas as Matérias</option>
+            <option value="Português">Português</option>
+            <option value="Matemática">Matemática</option>
+            <option value="História">História</option>
+            <option value="Geografia">Geografia</option>
+            <option value="Ciências">Ciências</option>
+            <option value="Inglês">Inglês</option>
+            <option value="Arte">Arte</option>
+            <option value="Educação Física">Educação Física</option>
+            <option value="Outros">Outros</option>
+          </select>
+
+          <!-- Botão Concluir Todas do Dia -->
+          <button id="completeAllBtn" class="px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 text-xs font-bold hover:bg-emerald-100 transition-colors flex items-center gap-1.5">
+            <i class="fa-solid fa-check-double"></i> Concluir Todas
+          </button>
+
+          <!-- Botão Adicionar Tarefa (Admin) -->
+          <button id="addTaskAdminBtn" class="admin-only hidden px-3 py-1.5 rounded-xl bg-csu-red hover:bg-csu-redDark text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5">
+            <i class="fa-solid fa-plus"></i> Nova Tarefa
+          </button>
+        </div>
+      </div>
+
+      <!-- LISTA DE TAREFAS -->
+      <div id="tasksListContainer" class="space-y-3">
+        <!-- Preenchido dinamicamente via JS -->
+      </div>
+    </section>
+
+    <!-- ABA 2: VISÃO SEMANAL -->
+    <section id="tab-semanal" class="tab-content hidden space-y-6">
+      <div class="flex items-center justify-between bg-white dark:bg-csu-cardDark p-4 rounded-2xl border border-slate-200 dark:border-csu-borderDark">
+        <button id="prevWeekBtn" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200">
+          <i class="fa-solid fa-chevron-left"></i> Semana Anterior
+        </button>
+        <h3 id="weekRangeDisplay" class="font-bold text-sm sm:text-base">Semana Atual</h3>
+        <button id="nextWeekBtn" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200">
+          Próxima Semana <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Grade dos 7 Dias da Semana -->
+      <div id="weeklyGridContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+        <!-- Renderizado via JS -->
+      </div>
+    </section>
+
+    <!-- ABA 3: CALENDÁRIO DE PROVAS -->
+    <section id="tab-provas" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Grade do Calendário Mensal -->
+        <div class="lg:col-span-2 bg-white dark:bg-csu-cardDark p-5 rounded-2xl border border-slate-200 dark:border-csu-borderDark shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 id="calendarMonthDisplay" class="font-extrabold text-base sm:text-lg">Mês Ano</h3>
+            <div class="flex items-center gap-1">
+              <button id="prevMonthBtn" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200"><i class="fa-solid fa-chevron-left"></i></button>
+              <button id="nextMonthBtn" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+          </div>
+
+          <!-- Dias da semana -->
+          <div class="grid grid-cols-7 text-center font-bold text-xs text-slate-400 py-2">
+            <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+          </div>
+
+          <!-- Matriz do Calendário -->
+          <div id="calendarDaysGrid" class="grid grid-cols-7 gap-1 sm:gap-2">
+            <!-- Renderizado via JS -->
+          </div>
+        </div>
+
+        <!-- Lista de Provas do Mês/Selecionadas -->
+        <div class="bg-white dark:bg-csu-cardDark p-5 rounded-2xl border border-slate-200 dark:border-csu-borderDark shadow-sm flex flex-col justify-between">
+          <div class="space-y-4">
             <div class="flex items-center justify-between">
-                
-                <div class="flex items-center gap-3 sm:gap-4">
-                    <!-- Logo CSU -->
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-csu-red to-red-700 rounded-2xl flex items-center justify-center shadow-lg shadow-red-200/50 flex-shrink-0" aria-hidden="true">
-                        <span class="text-white font-black text-xl tracking-tighter">CSU</span>
-                    </div>
-                    <div>
-                        <h1 class="text-base sm:text-xl font-extrabold text-csu-dark leading-tight tracking-tight">Colégio Santa Úrsula</h1>
-                        <!-- TEXTO GATILHO DA ANIMAÇÃO -->
-                        <button onclick="triggerBearAnimation()" class="text-sm font-bold text-csu-accent hover:text-red-700 bg-red-50/50 hover:bg-red-100 px-2.5 py-0.5 rounded-md mt-0.5 transition-all cursor-pointer text-left" aria-label="Ativar animação especial da turma">
-                            Turma 8C 🐻
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Controles Admin -->
-                <div class="flex items-center gap-2">
-                    <button id="login-link" onclick="openLoginModal()" class="text-slate-600 hover:text-csu-red font-bold text-sm flex items-center gap-2 px-3.5 py-2.5 rounded-xl hover:bg-slate-100 transition-all" aria-label="Acesso Administrativo">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                        <span class="hidden sm:inline">Admin</span>
-                    </button>
-                    <button id="logout-btn" onclick="logout()" class="hidden text-slate-600 hover:text-white font-bold text-sm flex items-center gap-2 px-3.5 py-2.5 rounded-xl hover:bg-csu-dark transition-all" aria-label="Sair do modo administrador">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" /></svg>
-                        <span class="hidden sm:inline">Sair</span>
-                    </button>
-                </div>
-
+              <h3 class="font-extrabold text-base flex items-center gap-2">
+                <i class="fa-solid fa-graduation-cap text-csu-red"></i> Provas Marcadas
+              </h3>
+              <button id="addExamAdminBtn" class="admin-only hidden px-3 py-1 rounded-xl bg-csu-red text-white text-xs font-bold">
+                <i class="fa-solid fa-plus"></i> Adicionar
+              </button>
             </div>
+
+            <div id="examsListContainer" class="space-y-3 max-h-[450px] overflow-y-auto pr-1">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
         </div>
-    </header>
+      </div>
+    </section>
 
-    <!-- ==========================================
-         MENU DE NAVEGAÇÃO
-         ========================================== -->
-    <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200/60 sticky top-[68px] sm:top-[81px] z-30" aria-label="Navegação Principal">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex gap-2 overflow-x-auto no-scrollbar py-3" role="tablist">
-                <button onclick="switchTab('tarefas')" id="tab-tarefas" role="tab" aria-selected="true" aria-controls="content-tarefas" class="tab-btn px-5 py-2.5 text-sm font-bold rounded-xl transition-all whitespace-nowrap bg-csu-red text-white shadow-float">
-                    📝 Tarefas Diárias
-                </button>
-                <button onclick="switchTab('calendario')" id="tab-calendario" role="tab" aria-selected="false" aria-controls="content-calendario" class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-slate-500 hover:bg-slate-100 hover:text-slate-800">
-                    📆 Provas & Trabalhos
-                </button>
-                <button onclick="switchTab('avisos')" id="tab-avisos" role="tab" aria-selected="false" aria-controls="content-avisos" class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-slate-500 hover:bg-slate-100 hover:text-slate-800">
-                    📢 Mural de Avisos
-                </button>
-            </div>
+    <!-- ABA 4: MURAL DE AVISOS -->
+    <section id="tab-avisos" class="tab-content hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">Mural de Avisos</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Recados importantes da coordenação e professores</p>
         </div>
-    </nav>
+        <button id="addNoticeAdminBtn" class="admin-only hidden px-4 py-2 rounded-xl bg-csu-red hover:bg-csu-redDark text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2">
+          <i class="fa-solid fa-plus"></i> Novo Aviso
+        </button>
+      </div>
 
-    <!-- ==========================================
-         CONTEÚDO PRINCIPAL
-         ========================================== -->
-    <main class="max-w-6xl w-full mx-auto px-4 py-8 flex-grow">
-        
-        <!-- ==================================
-             ABA 1: TAREFAS (COM LINKS INTEGRADOS)
-             ================================== -->
-        <section id="content-tarefas" role="tabpanel" class="tab-content block animate-[fadeIn_0.3s_ease]">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                
-                <!-- Coluna Principal: Tarefas -->
-                <div class="lg:col-span-8 space-y-6">
-                    
-                    <!-- Barra de Controle de Data e Filtro -->
-                    <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 border border-slate-100">
-                        <div class="flex items-center bg-slate-50 rounded-xl p-1 border border-slate-200">
-                            <button onclick="prevDay()" class="p-2 rounded-lg hover:bg-white hover:shadow-sm text-slate-600 transition-all" aria-label="Dia Anterior">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                            </button>
-                            <div class="text-center min-w-[180px] sm:min-w-[200px] px-2">
-                                <p id="current-date" class="font-bold text-csu-dark text-sm sm:text-base tracking-wide" aria-live="polite"></p>
-                            </div>
-                            <button onclick="nextDay()" class="p-2 rounded-lg hover:bg-white hover:shadow-sm text-slate-600 transition-all" aria-label="Próximo Dia">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                            </button>
-                        </div>
-                        
-                        <div class="flex items-center gap-3 w-full sm:w-auto">
-                            <button onclick="goToToday()" class="hidden sm:block px-4 py-2.5 text-sm bg-red-50 hover:bg-red-100 text-csu-accent rounded-xl transition-colors font-bold whitespace-nowrap">Ir para Hoje</button>
-                            <div class="relative w-full sm:w-auto">
-                                <select id="materia-filter" onchange="filterByMateria(this.value)" class="w-full sm:w-48 appearance-none bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 pr-10 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-csu-red focus:border-csu-red outline-none cursor-pointer" aria-label="Filtrar por matéria">
-                                    <option value="todas">Todas as matérias</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <div id="noticesGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Renderizado via JS -->
+      </div>
+    </section>
 
-                    <!-- Lista de Tarefas -->
-                    <div id="tarefas-container" class="space-y-5 min-h-[300px]" aria-live="polite">
-                        <!-- Carregando / Tarefas aqui via JS -->
-                    </div>
-
-                    <!-- Formulário Admin de TAREFAS -->
-                    <div id="admin-tarefas-form" class="hidden mt-10 bg-white border border-slate-200 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="bg-slate-800 px-6 py-4 border-b border-slate-700">
-                            <h2 class="text-white font-bold text-sm uppercase tracking-wider flex items-center gap-2">
-                                <svg class="w-5 h-5 text-csu-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                                Adicionar Nova Tarefa
-                            </h2>
-                        </div>
-                        <form onsubmit="addTarefa(event)" class="p-6">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
-                                <div>
-                                    <label for="tarefa-data" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Data de Entrega *</label>
-                                    <input type="date" id="tarefa-data" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700 font-medium">
-                                </div>
-                                <div>
-                                    <label for="tarefa-materia" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Matéria *</label>
-                                    <input type="text" id="tarefa-materia" required placeholder="Ex: Matemática" list="materias-list" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700 font-medium">
-                                    <datalist id="materias-list">
-                                        <option value="Matemática"><option value="Português"><option value="História"><option value="Geografia"><option value="Ciências"><option value="Inglês"><option value="Arte"><option value="Educação Física"><option value="Educação Financeira"><option value="Projeto Olímpico"><option value="ESE"><option value="Ensino Religioso"><option value="Filosofia"><option value="Redação">
-                                    </datalist>
-                                </div>
-                            </div>
-                            <div class="mb-5">
-                                <label for="tarefa-descricao" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">O que é para fazer? *</label>
-                                <input type="text" id="tarefa-descricao" required placeholder="Ex: Exercícios da página 45 a 47" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700">
-                            </div>
-                            <div class="mb-6">
-                                <label for="tarefa-link" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Link de Apoio (Opcional)</label>
-                                <input type="url" id="tarefa-link" placeholder="https://..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700">
-                            </div>
-                            <button type="submit" class="w-full sm:w-auto px-8 bg-csu-red hover:bg-red-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md focus:ring-4 focus:ring-red-200">Publicar Tarefa</button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Coluna Lateral: Links e Ferramentas -->
-                <div class="lg:col-span-4 space-y-6">
-                    <div class="bg-white rounded-2xl shadow-soft p-6 border border-slate-100 sticky top-[160px]">
-                        <h3 class="text-base font-black text-csu-dark mb-5 flex items-center gap-2">
-                            <span>🚀</span> Acesso Rápido
-                        </h3>
-                        
-                        <div class="flex flex-col gap-3">
-                            <!-- Link Principal do Site -->
-                            <a href="#" target="_blank" class="group relative overflow-hidden bg-slate-800 text-white p-4 rounded-xl flex items-center gap-4 hover:bg-slate-900 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2">
-                                <div class="absolute right-0 top-0 w-24 h-24 bg-white/5 rounded-full blur-xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
-                                <div class="bg-white/10 p-2.5 rounded-lg">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>
-                                </div>
-                                <div class="relative z-10">
-                                    <h4 class="font-bold text-sm tracking-wide">Site Oficial 8C</h4>
-                                    <p class="text-xs text-slate-300 mt-0.5">Acesse materiais extras</p>
-                                </div>
-                                <svg class="w-5 h-5 ml-auto text-slate-400 group-hover:text-white transition-colors group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                            </a>
-
-                            <div class="h-px w-full bg-slate-100 my-2"></div>
-
-                            <!-- Outros Links -->
-                            <a href="https://classroom.google.com" target="_blank" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all text-slate-700 font-medium text-sm group">
-                                <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center group-hover:scale-105 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg></div>
-                                Google Classroom
-                            </a>
-                            <a href="https://drive.google.com" target="_blank" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all text-slate-700 font-medium text-sm group">
-                                <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg></div>
-                                Drive da Turma
-                            </a>
-                            <a href="https://photos.google.com" target="_blank" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all text-slate-700 font-medium text-sm group">
-                                <div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-105 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
-                                Galeria de Fotos
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================================
-             ABA 2: CALENDÁRIO DE PROVAS (CORRIGIDO E ACESSÍVEL)
-             ================================== -->
-        <section id="content-calendario" role="tabpanel" class="tab-content hidden animate-[fadeIn_0.3s_ease]">
-            <div class="bg-white rounded-3xl shadow-soft p-5 sm:p-8 border border-slate-100 max-w-4xl mx-auto">
-                
-                <!-- Controle do Mês -->
-                <div class="flex items-center justify-between mb-8">
-                    <button onclick="changeMonth(-1)" class="p-2 sm:p-3 bg-slate-50 rounded-xl hover:bg-slate-100 text-slate-600 transition-colors focus:ring-2 focus:ring-csu-red" aria-label="Mês Anterior">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                    </button>
-                    <h2 id="calendar-month-display" class="text-xl sm:text-2xl font-black uppercase tracking-widest text-csu-dark" aria-live="polite">Mês / Ano</h2>
-                    <button onclick="changeMonth(1)" class="p-2 sm:p-3 bg-slate-50 rounded-xl hover:bg-slate-100 text-slate-600 transition-colors focus:ring-2 focus:ring-csu-red" aria-label="Próximo Mês">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                    </button>
-                </div>
-
-                <!-- Grade do Calendário -->
-                <div class="grid grid-cols-7 gap-2 sm:gap-4 mb-3">
-                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">DOM</div>
-                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">SEG</div>
-                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">TER</div>
-                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">QUA</div>
-                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">QUI</div>
-                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">SEX</div>
-                    <div class="text-center text-xs font-black text-slate-400 tracking-wider">SÁB</div>
-                </div>
-                <div id="calendar-grid" class="grid grid-cols-7 gap-2 sm:gap-4 auto-rows-fr">
-                    <!-- Dias gerados via JS -->
-                </div>
-            </div>
-
-            <!-- Formulário Admin de PROVAS -->
-            <div id="admin-provas-form" class="hidden mt-10 max-w-4xl mx-auto bg-white border border-slate-200 rounded-2xl shadow-soft overflow-hidden">
-                <div class="bg-slate-800 px-6 py-4 border-b border-slate-700">
-                    <h2 class="text-white font-bold text-sm uppercase tracking-wider flex items-center gap-2">
-                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                        Agendar Prova / Trabalho
-                    </h2>
-                </div>
-                <form onsubmit="addProva(event)" class="p-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
-                        <div>
-                            <label for="prova-data" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Data da Avaliação *</label>
-                            <input type="date" id="prova-data" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all font-medium text-slate-700">
-                        </div>
-                        <div>
-                            <label for="prova-materia" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Matéria e Descrição *</label>
-                            <input type="text" id="prova-materia" required placeholder="Ex: Prova de História - Cap. 4 e 5" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700">
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full sm:w-auto px-8 bg-slate-800 hover:bg-black text-white font-bold py-3.5 rounded-xl transition-all shadow-md focus:ring-4 focus:ring-slate-300">Adicionar ao Calendário</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- ==================================
-             ABA 3: AVISOS
-             ================================== -->
-        <section id="content-avisos" role="tabpanel" class="tab-content hidden animate-[fadeIn_0.3s_ease]">
-            <div class="max-w-4xl mx-auto space-y-6">
-                
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-xl font-black text-csu-dark flex items-center gap-2 uppercase tracking-wide">
-                        <span class="text-csu-accent">📢</span> Mural da Turma
-                    </h3>
-                </div>
-
-                <div id="avisos-container" class="grid gap-5" aria-live="polite">
-                    <!-- Avisos gerados via JS -->
-                </div>
-
-                <!-- Formulário Admin de AVISOS -->
-                <div id="admin-avisos-form" class="hidden mt-10 bg-white border border-slate-200 rounded-2xl shadow-soft overflow-hidden">
-                    <div class="bg-slate-800 px-6 py-4 border-b border-slate-700">
-                        <h2 class="text-white font-bold text-sm uppercase tracking-wider flex items-center gap-2">
-                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
-                            Fixar Novo Aviso
-                        </h2>
-                    </div>
-                    <form onsubmit="addAviso(event)" class="p-6">
-                        <div class="mb-5">
-                            <label for="aviso-titulo" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Título *</label>
-                            <input type="text" id="aviso-titulo" required placeholder="Ex: Aviso Importante sobre Excursão" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-800 font-bold">
-                        </div>
-                        <div class="mb-6">
-                            <label for="aviso-texto" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Mensagem *</label>
-                            <textarea id="aviso-texto" required rows="4" placeholder="Escreva os detalhes aqui..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-all text-slate-700 resize-y"></textarea>
-                        </div>
-                        <button type="submit" class="w-full sm:w-auto px-8 bg-csu-red hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-md focus:ring-4 focus:ring-red-200 transition-all">Fixar no Mural</button>
-                    </form>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="mt-auto py-8 bg-slate-900 border-t border-slate-800 text-center" role="contentinfo">
-        <p class="font-bold text-slate-300 text-sm tracking-widest mb-1.5 uppercase">Colégio Santa Úrsula</p>
-        <p class="text-slate-500 text-xs">Portal Exclusivo Turma 8C © 2026</p>
-    </footer>
-
-
-    <!-- ==========================================
-         MODAIS (LOGIN) E TOAST
-         ========================================== -->
-    
-    <!-- Modal de Login -->
-    <div id="login-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="login-title">
-        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden transform scale-95 transition-transform duration-300" id="login-modal-content">
-            <div class="p-6 sm:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 id="login-title" class="text-xl font-black uppercase text-slate-800 tracking-tight">Acesso Admin</h3>
-                    <button onclick="closeLoginModal()" class="p-2 text-slate-400 hover:text-csu-red hover:bg-red-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-csu-red" aria-label="Fechar modal">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
-                </div>
-                <form onsubmit="doLogin(event)">
-                    <div id="login-error" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm font-semibold flex items-center gap-2" role="alert">
-                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <span>Credenciais incorretas.</span>
-                    </div>
-                    <div class="space-y-4">
-                        <div>
-                            <label for="login-email" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">E-mail</label>
-                            <input type="email" id="login-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-colors text-slate-800">
-                        </div>
-                        <div>
-                            <label for="login-password" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Senha</label>
-                            <input type="password" id="login-password" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-csu-red outline-none transition-colors text-slate-800">
-                        </div>
-                        <button id="login-btn" type="submit" class="w-full bg-slate-800 hover:bg-black text-white font-bold py-3.5 rounded-xl transition-all shadow-lg hover:shadow-xl mt-4 focus:ring-4 focus:ring-slate-300">Autenticar</button>
-                    </div>
-                </form>
-            </div>
+    <!-- ABA 5: HISTÓRICO -->
+    <section id="tab-historico" class="tab-content hidden space-y-6">
+      <div class="bg-white dark:bg-csu-cardDark p-5 rounded-2xl border border-slate-200 dark:border-csu-borderDark">
+        <h2 class="text-lg font-bold mb-1">Histórico de Tarefas Anteriores</h2>
+        <p class="text-xs text-slate-500 mb-4">Tarefas de dias passados para consulta e revisão</p>
+        <div id="historyListContainer" class="space-y-3">
+          <!-- Renderizado via JS -->
         </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== NAVEGAÇÃO INFERIOR (MOBILE BOTTOM NAV) ==================== -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white dark:bg-csu-cardDark border-t border-slate-200 dark:border-csu-borderDark flex justify-around py-2 px-1 shadow-lg">
+    <button class="tab-btn active flex flex-col items-center gap-1 text-[10px] font-bold text-csu-red" data-tab="tab-tarefas">
+      <i class="fa-solid fa-list-check text-base"></i> Tarefas
+    </button>
+    <button class="tab-btn flex flex-col items-center gap-1 text-[10px] font-bold text-slate-400 hover:text-slate-600" data-tab="tab-semanal">
+      <i class="fa-solid fa-calendar-week text-base"></i> Semana
+    </button>
+    <button class="tab-btn flex flex-col items-center gap-1 text-[10px] font-bold text-slate-400 hover:text-slate-600" data-tab="tab-provas">
+      <i class="fa-solid fa-graduation-cap text-base"></i> Provas
+    </button>
+    <button class="tab-btn flex flex-col items-center gap-1 text-[10px] font-bold text-slate-400 hover:text-slate-600" data-tab="tab-avisos">
+      <i class="fa-solid fa-bullhorn text-base"></i> Avisos
+    </button>
+    <button class="tab-btn flex flex-col items-center gap-1 text-[10px] font-bold text-slate-400 hover:text-slate-600" data-tab="tab-historico">
+      <i class="fa-solid fa-clock-rotate-left text-base"></i> Histórico
+    </button>
+  </nav>
+
+  <!-- ==================== MODAIS E OVERLAYS ==================== -->
+
+  <!-- MODAL 1: LOGIN ADMIN -->
+  <div id="loginModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-csu-cardDark w-full max-w-sm rounded-3xl p-6 border border-slate-200 dark:border-csu-borderDark shadow-2xl relative">
+      <button onclick="closeModal('loginModal')" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 rounded-2xl bg-csu-red/10 text-csu-red flex items-center justify-center mx-auto mb-2 text-xl">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3 class="font-extrabold text-lg">Acesso Administrativo</h3>
+        <p class="text-xs text-slate-500">Apenas para professores e coordenação</p>
+      </div>
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold mb-1">E-mail</label>
+          <input type="email" id="loginEmail" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-csu-borderDark bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-csu-red focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1">Senha</label>
+          <input type="password" id="loginPassword" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-csu-borderDark bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-csu-red focus:outline-none">
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-csu-red text-white text-xs font-bold hover:bg-csu-redDark transition-all shadow-md">
+          Entrar no Painel
+        </button>
+      </form>
     </div>
+  </div>
 
-    <!-- Toast -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3.5 rounded-2xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-sm font-bold flex items-center gap-3 w-max max-w-[90vw]" role="status" aria-live="polite">
-        <span id="toast-icon">ℹ️</span>
-        <span id="toast-msg"></span>
-    </div>
+  <!-- MODAL 2: FORMULÁRIO DINÂMICO (CRIAR / EDITAR ITEM) -->
+  <div id="itemModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-csu-cardDark w-full max-w-md rounded-3xl p-6 border border-slate-200 dark:border-csu-borderDark shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal('itemModal')" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+      <h3 id="itemModalTitle" class="font-extrabold text-lg mb-4">Adicionar Item</h3>
 
+      <form id="itemForm" class="space-y-4">
+        <input type="hidden" id="modalItemType">
+        <input type="hidden" id="modalItemId">
 
-    <!-- ==========================================
-         ANIMAÇÃO ESPECIAL DO URSO
-         ========================================== -->
-    <div id="bear-animation-container" class="fixed inset-0 z-[100] hidden items-center justify-center pointer-events-none overflow-hidden" aria-hidden="true">
-        <div id="bear-bg" class="absolute inset-0 bg-slate-900/90 backdrop-blur-md opacity-0 transition-opacity duration-500"></div>
-        <div id="bear-content" class="relative z-10 flex flex-col items-center opacity-0 scale-0">
-            <!-- Estrelas -->
-            <div class="flex gap-6 mb-2">
-                <svg id="star1" class="w-12 h-12 text-yellow-400 opacity-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                <svg id="star2" class="w-16 h-16 text-yellow-400 opacity-0 -mt-6" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                <svg id="star3" class="w-12 h-12 text-yellow-400 opacity-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            </div>
-            <!-- Urso Emoji -->
-            <div class="text-[120px] sm:text-[150px] leading-none drop-shadow-[0_0_40px_rgba(220,38,38,0.8)] select-none">🐻</div>
-            <!-- Texto Brilhante -->
-            <h2 id="bear-text" class="text-4xl sm:text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-100 to-yellow-300 mt-6 tracking-widest text-center uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
-                Tricampeões<br>do Kahoot!
-            </h2>
+        <!-- Campo Título -->
+        <div>
+          <label class="block text-xs font-bold mb-1">Título</label>
+          <input type="text" id="modalTitle" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-csu-borderDark bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-csu-red focus:outline-none">
         </div>
+
+        <!-- Campo Matéria (Tarefas e Provas) -->
+        <div id="fieldSubject">
+          <label class="block text-xs font-bold mb-1">Matéria</label>
+          <select id="modalSubject" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-csu-borderDark bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-csu-red focus:outline-none">
+            <option value="Português">Português</option>
+            <option value="Matemática">Matemática</option>
+            <option value="História">História</option>
+            <option value="Geografia">Geografia</option>
+            <option value="Ciências">Ciências</option>
+            <option value="Inglês">Inglês</option>
+            <option value="Arte">Arte</option>
+            <option value="Educação Física">Educação Física</option>
+            <option value="Geral">Geral / Avisos</option>
+          </select>
+        </div>
+
+        <!-- Campo Data -->
+        <div id="fieldDate">
+          <label class="block text-xs font-bold mb-1">Data</label>
+          <input type="date" id="modalDate" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-csu-borderDark bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-csu-red focus:outline-none">
+        </div>
+
+        <!-- Campo Anexo de Imagem (Avisos) -->
+        <div id="fieldAttachment" class="hidden">
+          <label class="block text-xs font-bold mb-1">URL da Imagem / Anexo (Opcional)</label>
+          <input type="url" id="modalImageUrl" placeholder="https://exemplo.com/imagem.png" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-csu-borderDark bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-csu-red focus:outline-none">
+        </div>
+
+        <!-- Campo Descrição -->
+        <div>
+          <label class="block text-xs font-bold mb-1">Descrição / Conteúdo</label>
+          <textarea id="modalDescription" rows="4" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-csu-borderDark bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-csu-red focus:outline-none"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-csu-red text-white text-xs font-bold hover:bg-csu-redDark transition-all shadow-md">
+          Salvar Alterações
+        </button>
+      </form>
     </div>
+  </div>
 
+  <!-- MODAL 3: PERFIL DO ALUNO -->
+  <div id="profileModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-csu-cardDark w-full max-w-sm rounded-3xl p-6 border border-slate-200 dark:border-csu-borderDark shadow-2xl relative">
+      <button onclick="closeModal('profileModal')" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+      <h3 class="font-extrabold text-lg mb-4 text-center">Perfil do Aluno</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold mb-1">Seu Nome / Apelido</label>
+          <input type="text" id="studentNameInput" placeholder="Ex: Lucas Silva" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-csu-borderDark bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-csu-red focus:outline-none">
+        </div>
+        <button id="saveProfileBtn" class="w-full py-2.5 rounded-xl bg-csu-red text-white text-xs font-bold hover:bg-csu-redDark transition-all">
+          Salvar Nome
+        </button>
+      </div>
+    </div>
+  </div>
 
-    <!-- ==========================================
-         JAVASCRIPT & FIREBASE
-         ========================================== -->
-    <script type="module">
-        // --- 1. CONFIGURAÇÃO FIREBASE ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyByqfGXBrIqt0cXPI3MrTQjdD-wVzLfwiU",
-            authDomain: "agenda-8c.firebaseapp.com",
-            databaseURL: "https://agenda-8c-default-rtdb.firebaseio.com",
-            projectId: "agenda-8c",
-            storageBucket: "agenda-8c.firebasestorage.app",
-            messagingSenderId: "1091712303422",
-            appId: "1:1091712303422:web:8a6da6352c13fce4542c6f"
-        };
+  <!-- MODAL 4: EASTER EGG KAHOOT BEAR -->
+  <div id="kahootModal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-gradient-to-br from-purple-700 via-indigo-800 to-slate-900 text-white w-full max-w-md rounded-3xl p-8 border border-purple-500/30 text-center shadow-2xl relative overflow-hidden">
+      <button onclick="closeModal('kahootModal')" class="absolute right-4 top-4 text-white/70 hover:text-white">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+      
+      <div class="animate-kahoot-bear text-7xl my-4">🐻🏆</div>
+      
+      <span class="inline-block px-3 py-1 bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-widest rounded-full mb-2">
+        Insuperável!
+      </span>
+      <h2 class="text-2xl font-black mb-2">Urso Tricampeão do Kahoot!</h2>
+      <p class="text-xs text-purple-200 mb-6">A lenda da Turma 8°C reina suprema nos quizes do Colégio Santa Úrsula.</p>
+      
+      <button onclick="closeModal('kahootModal')" class="px-6 py-2.5 rounded-xl bg-white text-purple-900 font-extrabold text-xs hover:bg-purple-100 transition-all shadow-lg">
+        Respeitar o Campeão 🙌
+      </button>
+    </div>
+  </div>
 
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, push, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  <!-- CONTAINER DE TOASTS DE NOTIFICAÇÃO -->
+  <div id="toastContainer" class="fixed bottom-20 md:bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const auth = getAuth(app);
-        
-        const tarefasRef = ref(db, 'tarefas');
-        const provasRef = ref(db, 'provas');
-        const avisosRef = ref(db, 'avisos');
+  <!-- ==================== LOGICA EM JAVASCRIPT (ES MODULES + FIREBASE) ==================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, onValue, push, set, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // --- 2. ESTADOS ---
-        let tarefas = []; let provas = []; let avisos = [];
-        let currentDate = new Date();
-        let calMonth = new Date().getMonth(); let calYear = new Date().getFullYear();
-        let isAdmin = false; let mFilter = 'todas';
-        const STORAGE_KEY = 'concluidas_8c_csu';
+    // ------------------------------------------------------------------
+    // CONFIGURAÇÃO DO FIREBASE (Substitua pelos seus dados reais se necessário)
+    // ------------------------------------------------------------------
+    const firebaseConfig = {
+      apiKey: "AIzaSyDemoKeyForCSU8C_RefactoredPortal",
+      authDomain: "csu-8c-portal.firebaseapp.com",
+      databaseURL: "https://csu-8c-portal-default-rtdb.firebaseio.com",
+      projectId: "csu-8c-portal",
+      storageBucket: "csu-8c-portal.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:csu8cportal"
+    };
 
-        // Cores modernizadas para as matérias
-        const tagCores = {
-            'Matemática': 'bg-blue-500/10 text-blue-700 border-blue-200', 'Português': 'bg-teal-500/10 text-teal-700 border-teal-200',
-            'História': 'bg-amber-500/10 text-amber-700 border-amber-200', 'Geografia': 'bg-emerald-500/10 text-emerald-700 border-emerald-200',
-            'Ciências': 'bg-purple-500/10 text-purple-700 border-purple-200', 'Inglês': 'bg-pink-500/10 text-pink-700 border-pink-200',
-            'Arte': 'bg-fuchsia-500/10 text-fuchsia-700 border-fuchsia-200', 'Educação Física': 'bg-orange-500/10 text-orange-700 border-orange-200', 
-            'Educação Financeira': 'bg-green-500/10 text-green-700 border-green-200', 'Projeto Olímpico': 'bg-indigo-500/10 text-indigo-700 border-indigo-200',
-            'ESE': 'bg-cyan-500/10 text-cyan-700 border-cyan-200', 'Ensino Religioso': 'bg-sky-500/10 text-sky-700 border-sky-200',
-            'Filosofia': 'bg-violet-500/10 text-violet-700 border-violet-200', 'Redação': 'bg-rose-500/10 text-rose-700 border-rose-200'
-        };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
 
-        // --- 3. AUTH ---
-        onAuthStateChanged(auth, (user) => {
-            isAdmin = !!user;
-            updateAdminUI(); renderTarefas(); renderCalendario(); renderAvisos();
+    // ------------------------------------------------------------------
+    // ESTADO GLOBAL DA APLICAÇÃO
+    // ------------------------------------------------------------------
+    const state = {
+      isAdmin: false,
+      currentDate: new Date(),
+      currentWeekOffset: 0,
+      tasks: {},
+      exams: {},
+      notices: {},
+      completedTasks: JSON.parse(localStorage.getItem('csu_completed_tasks') || '{}'),
+      studentName: localStorage.getItem('csu_student_name') || 'Aluno',
+      theme: localStorage.getItem('csu_theme') || 'light'
+    };
+
+    // ------------------------------------------------------------------
+    // INICIALIZAÇÃO & CONFIGURAÇÕES GERAIS
+    // ------------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initTabs();
+      initProfile();
+      initEventListeners();
+      initFirebaseListeners();
+      initNotifications();
+      renderCurrentDateDisplay();
+    });
+
+    // Modo Escuro
+    function initTheme() {
+      if (state.theme === 'dark' || (!('csu_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeIcon').className = 'fa-solid fa-sun text-lg';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeIcon').className = 'fa-solid fa-moon text-lg';
+      }
+    }
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      state.theme = isDark ? 'dark' : 'light';
+      localStorage.setItem('csu_theme', state.theme);
+      document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun text-lg' : 'fa-solid fa-moon text-lg';
+    });
+
+    // Abas de Navegação
+    function initTabs() {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tabId = btn.getAttribute('data-tab');
+          
+          tabBtns.forEach(b => {
+            b.classList.remove('active', 'border-csu-red', 'text-csu-red');
+            b.classList.add('border-transparent', 'text-slate-500', 'dark:text-slate-400');
+          });
+
+          // Ativa o botão selecionado
+          document.querySelectorAll(`[data-tab="${tabId}"]`).forEach(activeBtn => {
+            activeBtn.classList.add('active', 'border-csu-red', 'text-csu-red');
+            activeBtn.classList.remove('border-transparent', 'text-slate-500', 'dark:text-slate-400');
+          });
+
+          // Mostra o conteúdo correspondente
+          document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+          document.getElementById(tabId)?.classList.remove('hidden');
+
+          if (tabId === 'tab-semanal') renderWeeklyView();
+          if (tabId === 'tab-provas') renderCalendar();
+          if (tabId === 'tab-historico') renderHistory();
         });
+      });
+    }
 
-        // --- 4. UI: ABAS E TOAST ---
-        window.switchTab = function(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => { c.classList.add('hidden'); c.classList.remove('block'); });
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.setAttribute('aria-selected', 'false');
-                b.classList.remove('bg-csu-red', 'text-white', 'shadow-float');
-                b.classList.add('text-slate-500', 'hover:bg-slate-100', 'hover:text-slate-800');
-            });
-            document.getElementById(`content-${tabId}`).classList.remove('hidden');
-            document.getElementById(`content-${tabId}`).classList.add('block');
-            
-            const btn = document.getElementById(`tab-${tabId}`);
-            btn.setAttribute('aria-selected', 'true');
-            btn.classList.add('bg-csu-red', 'text-white', 'shadow-float');
-            btn.classList.remove('text-slate-500', 'hover:bg-slate-100', 'hover:text-slate-800');
+    // Perfil do Aluno
+    function initProfile() {
+      document.getElementById('headerStudentName').textContent = `Olá, ${state.studentName}`;
+      document.getElementById('studentNameInput').value = state.studentName;
 
-            if(tabId === 'calendario') renderCalendario();
-        };
+      document.getElementById('profileBtn').addEventListener('click', () => openModal('profileModal'));
+      document.getElementById('saveProfileBtn').addEventListener('click', () => {
+        const newName = document.getElementById('studentNameInput').value.trim() || 'Aluno';
+        state.studentName = newName;
+        localStorage.setItem('csu_student_name', newName);
+        document.getElementById('headerStudentName').textContent = `Olá, ${newName}`;
+        closeModal('profileModal');
+        showToast('Perfil atualizado com sucesso!');
+      });
+    }
 
-        function showToast(msg, type = 'success') {
-            const toast = document.getElementById('toast');
-            const icon = document.getElementById('toast-icon');
-            const msgEl = document.getElementById('toast-msg');
-            
-            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 ${type === 'error' ? 'bg-red-600' : 'bg-slate-800'} text-white px-6 py-3.5 rounded-2xl shadow-2xl transform transition-all duration-300 z-50 text-sm font-bold flex items-center gap-3 w-max max-w-[90vw]`;
-            icon.textContent = type === 'error' ? '⚠️' : '✅';
-            msgEl.textContent = msg;
-            
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3500);
-        }
+    // ------------------------------------------------------------------
+    // FIREBASE AUTH & REALTIME DATABASE LISTENERS
+    // ------------------------------------------------------------------
+    function initFirebaseListeners() {
+      // Estado de Autenticação
+      onAuthStateChanged(auth, user => {
+        state.isAdmin = !!user;
+        updateAdminUI();
+      });
 
-        // --- 5. RENDER: TAREFAS ---
-        function dateToString(d) {
-            const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const day = String(d.getDate()).padStart(2, '0');
-            return `${y}-${m}-${day}`;
-        }
-        function formatDate(dateStr) {
-            const [y, m, d] = dateStr.split('-');
-            const week = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-            const dt = new Date(y, m - 1, d);
-            return `${d}/${m}/${y} • ${week[dt.getDay()]}`;
-        }
+      // Ouvinte de Tarefas
+      onValue(ref(db, 'tarefas'), snapshot => {
+        state.tasks = snapshot.val() || {};
+        renderDailyTasks();
+        renderStatistics();
+        checkTomorrowReminders();
+        updateFaviconBadge();
+      });
 
-        window.renderTarefas = function() {
-            const container = document.getElementById('tarefas-container');
-            const dateStr = dateToString(currentDate);
-            document.getElementById('current-date').textContent = formatDate(dateStr);
+      // Ouvinte de Provas
+      onValue(ref(db, 'provas'), snapshot => {
+        state.exams = snapshot.val() || {};
+        renderExamsList();
+        renderCalendar();
+      });
 
-            let dayTasks = tarefas.filter(t => t.data === dateStr);
-            if (mFilter !== 'todas') dayTasks = dayTasks.filter(t => t.materia === mFilter);
+      // Ouvinte de Avisos
+      onValue(ref(db, 'avisos'), snapshot => {
+        state.notices = snapshot.val() || {};
+        renderNotices();
+      });
+    }
 
-            if (dayTasks.length === 0) {
-                container.innerHTML = `<div class="bg-white rounded-2xl border border-slate-100 p-12 text-center shadow-soft flex flex-col items-center justify-center h-full min-h-[300px]">
-                    <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-3xl mb-4 border border-slate-100">🎉</div>
-                    <p class="text-slate-800 font-black uppercase tracking-wide text-lg">Tudo limpo!</p>
-                    <p class="text-slate-500 text-sm mt-1">Nenhuma tarefa registrada para esta data.</p>
-                </div>`;
-                return;
-            }
+    function updateAdminUI() {
+      const adminBtns = document.querySelectorAll('.admin-only');
+      adminBtns.forEach(el => el.classList.toggle('hidden', !state.isAdmin));
+      document.getElementById('adminAuthText').textContent = state.isAdmin ? 'Sair (Admin)' : 'Admin';
+    }
 
-            let html = '';
-            dayTasks.forEach(task => {
-                const checked = (JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')).includes(task.id);
-                const tagStyle = tagCores[task.materia] || 'bg-slate-100 text-slate-700 border-slate-200';
-                
-                html += `
-                    <div class="bg-white rounded-2xl border border-slate-100 shadow-soft p-5 flex items-start gap-4 transition-all hover:shadow-md ${checked ? 'opacity-60 bg-slate-50' : ''}">
-                        <div class="pt-1 flex-shrink-0">
-                            <input type="checkbox" ${checked ? 'checked' : ''} onchange="window.toggleConcluida('${task.id}')" aria-label="Marcar tarefa de ${task.materia} como concluída" class="focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
-                        </div>
-                        <div class="flex-grow min-w-0">
-                            <span class="inline-block px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wider border ${tagStyle} mb-2">${task.materia}</span>
-                            <p class="text-sm sm:text-base font-semibold text-slate-800 ${checked ? 'line-through text-slate-500' : ''}">${task.descricao}</p>
-                            ${task.link ? `<a href="${task.link}" target="_blank" class="inline-flex items-center gap-1.5 mt-3 text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors w-fit"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg> Material de Apoio</a>` : ''}
-                        </div>
-                        ${isAdmin ? `<div class="flex-shrink-0"><button onclick="window.excluirItem('tarefas', '${task.id}')" aria-label="Excluir tarefa de ${task.materia}" class="text-slate-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div>` : ''}
-                    </div>`;
-            });
-            container.innerHTML = html;
-        };
+    // Modal de Login
+    document.getElementById('adminAuthBtn').addEventListener('click', () => {
+      if (state.isAdmin) {
+        signOut(auth).then(() => showToast('Sessão encerrada.'));
+      } else {
+        openModal('loginModal');
+      }
+    });
 
-        // --- 6. RENDER: CALENDÁRIO (CORRIGIDO PARA A11Y E VISIBILIDADE) ---
-        window.changeMonth = function(dir) {
-            calMonth += dir;
-            if (calMonth < 0) { calMonth = 11; calYear--; }
-            else if (calMonth > 11) { calMonth = 0; calYear++; }
-            renderCalendario();
-        };
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const pass = document.getElementById('loginPassword').value;
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        closeModal('loginModal');
+        showToast('Autenticado como Administrador!');
+      } catch (err) {
+        showToast('Erro ao realizar login. Verifique as credenciais.', 'error');
+      }
+    });
 
-        window.renderCalendario = function() {
-            const grid = document.getElementById('calendar-grid');
-            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-            document.getElementById('calendar-month-display').textContent = `${monthNames[calMonth]} ${calYear}`;
+    // ------------------------------------------------------------------
+    // RENDERIZAÇÃO & LÓGICA DE TAREFAS DIÁRIAS
+    // ------------------------------------------------------------------
+    function formatDateKey(date) {
+      return date.toISOString().split('T')[0];
+    }
 
-            const firstDay = new Date(calYear, calMonth, 1).getDay();
-            const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-            
-            let html = '';
-            
-            // Células vazias de alinhamento
-            for(let i=0; i<firstDay; i++) { 
-                html += `<div class="bg-transparent rounded-xl p-2 min-h-[6rem] sm:min-h-[7rem]" aria-hidden="true"></div>`; 
-            }
-            
-            // Dias com conteúdo
-            for(let d=1; d<=daysInMonth; d++) {
-                const dStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-                const diaHoje = dateToString(new Date()) === dStr;
-                const provasDoDia = provas.filter(p => p.data === dStr);
-                
-                let provasHtml = '';
-                let ariaProvasDesc = '';
-                
-                if (provasDoDia.length > 0) {
-                    provasHtml = `<ul class="flex flex-col w-full" aria-label="Eventos do dia">`;
-                    provasDoDia.forEach(p => {
-                        ariaProvasDesc += `${p.materia}. `;
-                        // AQUI ESTÁ A CORREÇÃO: Removido truncate e items-center, adicionado break-words e absolute no botão
-                        provasHtml += `
-                            <li class="bg-csu-red text-white text-[10px] sm:text-xs font-semibold px-2 py-1.5 rounded-lg mb-1.5 relative group shadow-sm flex">
-                                <span class="block break-words pr-6 leading-tight w-full">${p.materia}</span>
-                                ${isAdmin ? `<button onclick="window.excluirItem('provas', '${p.id}')" aria-label="Excluir evento: ${p.materia}" class="absolute top-1 right-1 text-white/70 hover:text-white bg-red-800/50 hover:bg-red-800 rounded p-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-white"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>` : ''}
-                            </li>`;
-                    });
-                    provasHtml += `</ul>`;
-                }
+    function renderCurrentDateDisplay() {
+      const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+      const dayOptions = { weekday: 'long' };
+      document.getElementById('currentDateDisplay').textContent = state.currentDate.toLocaleDateString('pt-BR', options);
+      document.getElementById('currentDayOfWeekDisplay').textContent = state.currentDate.toLocaleDateString('pt-BR', dayOptions);
+    }
 
-                // Cria o rótulo de leitura dinâmica para acessibilidade
-                const diaLabel = `Dia ${d} de ${monthNames[calMonth]}. ${diaHoje ? 'Hoje. ' : ''}${provasDoDia.length > 0 ? `Tem ${provasDoDia.length} evento(s): ${ariaProvasDesc}` : 'Sem eventos.'}`;
+    function renderDailyTasks() {
+      const container = document.getElementById('tasksListContainer');
+      const dateStr = formatDateKey(state.currentDate);
+      const subjectFilter = document.getElementById('subjectFilter').value;
 
-                html += `
-                    <div tabindex="0" aria-label="${diaLabel}" class="border ${diaHoje ? 'border-csu-accent bg-red-50/20 shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200'} rounded-2xl p-2 sm:p-3 min-h-[6rem] sm:min-h-[7rem] flex flex-col overflow-hidden transition-colors focus:outline-none focus:ring-2 focus:ring-csu-red focus:border-transparent">
-                        <span aria-hidden="true" class="text-xs sm:text-sm font-black ${diaHoje ? 'text-csu-red bg-red-100 w-7 h-7 flex items-center justify-center rounded-full' : 'text-slate-500'} mb-2">${d}</span>
-                        <div class="flex-grow overflow-y-auto w-full styled-scrollbar pr-0.5">${provasHtml}</div>
-                    </div>`;
-            }
-            grid.innerHTML = html;
-        };
+      container.innerHTML = '';
 
-        // --- 7. RENDER: AVISOS ---
-        window.renderAvisos = function() {
-            const container = document.getElementById('avisos-container');
-            if (avisos.length === 0) {
-                container.innerHTML = `<div class="text-center py-10 bg-white border border-slate-100 rounded-2xl shadow-soft"><p class="text-slate-500 text-sm">O mural está vazio no momento.</p></div>`;
-                return;
-            }
-            
-            const avisosOrdenados = [...avisos].reverse();
-            let html = '';
-            avisosOrdenados.forEach(av => {
-                html += `
-                    <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-soft relative group hover:shadow-md transition-shadow">
-                        ${isAdmin ? `<button onclick="window.excluirItem('avisos', '${av.id}')" aria-label="Excluir aviso sobre ${av.titulo}" class="absolute top-4 right-4 text-slate-300 hover:text-red-500 bg-slate-50 hover:bg-red-50 p-2 rounded-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>` : ''}
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-csu-accent flex-shrink-0 mt-1" aria-hidden="true">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
-                            </div>
-                            <div>
-                                <h4 class="font-black text-slate-800 text-lg mb-2">${av.titulo}</h4>
-                                <p class="text-sm sm:text-base text-slate-600 leading-relaxed whitespace-pre-wrap">${av.texto}</p>
-                            </div>
-                        </div>
-                    </div>`;
-            });
-            container.innerHTML = html;
-        };
+      // Filtra tarefas do dia atual
+      let dayTasks = Object.entries(state.tasks)
+        .map(([id, task]) => ({ id, ...task }))
+        .filter(task => task.data === dateStr);
 
-        // --- 8. CRUD E ADMIN ---
-        window.excluirItem = async function(tipo, id) {
-            if(!isAdmin || !confirm('Tem certeza que deseja apagar permanentemente este item?')) return;
-            try { await remove(ref(db, `${tipo}/${id}`)); showToast('Item excluído com sucesso.'); } 
-            catch(e) { showToast('Erro ao excluir item.', 'error'); }
-        };
+      if (subjectFilter !== 'all') {
+        dayTasks = dayTasks.filter(t => t.materia === subjectFilter);
+      }
 
-        window.addTarefa = async function(e) { e.preventDefault(); if(!isAdmin) return;
-            const data = document.getElementById('tarefa-data').value;
-            const materia = document.getElementById('tarefa-materia').value;
-            const descricao = document.getElementById('tarefa-descricao').value;
-            const link = document.getElementById('tarefa-link').value;
-            try { await push(tarefasRef, { data, materia, descricao, link: link||'' }); e.target.reset(); showToast('Tarefa postada com sucesso!'); } 
-            catch(err) { showToast('Erro ao postar.', 'error'); }
-        };
+      if (dayTasks.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 bg-white dark:bg-csu-cardDark rounded-2xl border border-slate-200 dark:border-csu-borderDark">
+            <i class="fa-solid fa-circle-check text-4xl text-emerald-500 mb-2"></i>
+            <p class="font-bold text-sm">Nenhuma tarefa para esta data!</p>
+            <p class="text-xs text-slate-400">Aproveite para descansar ou revisar a matéria.</p>
+          </div>
+        `;
+        return;
+      }
 
-        window.addProva = async function(e) { e.preventDefault(); if(!isAdmin) return;
-            const data = document.getElementById('prova-data').value;
-            const materia = document.getElementById('prova-materia').value;
-            try { await push(provasRef, { data, materia }); e.target.reset(); showToast('Avaliação agendada com sucesso!'); } 
-            catch(err) { showToast('Erro ao agendar.', 'error'); }
-        };
+      dayTasks.forEach(task => {
+        const isDone = !!state.completedTasks[task.id];
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-2xl border transition-all flex items-start justify-between gap-3 ${
+          isDone 
+            ? 'bg-slate-100/70 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800 opacity-75' 
+            : 'bg-white dark:bg-csu-cardDark border-slate-200 dark:border-csu-borderDark shadow-sm'
+        }`;
 
-        window.addAviso = async function(e) { e.preventDefault(); if(!isAdmin) return;
-            const titulo = document.getElementById('aviso-titulo').value;
-            const texto = document.getElementById('aviso-texto').value;
-            try { await push(avisosRef, { titulo, texto }); e.target.reset(); showToast('Aviso fixado no mural!'); } 
-            catch(err) { showToast('Erro ao postar.', 'error'); }
-        };
+        card.innerHTML = `
+          <div class="flex items-start gap-3 flex-1">
+            <input type="checkbox" ${isDone ? 'checked' : ''} data-id="${task.id}" class="task-checkbox mt-1 w-4 h-4 rounded border-slate-300 text-csu-red focus:ring-csu-red cursor-pointer">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider ${getSubjectBadgeColor(task.materia)}">
+                  ${task.materia}
+                </span>
+                <h4 class="font-bold text-sm ${isDone ? 'line-through text-slate-400' : ''}">${escapeHtml(task.titulo)}</h4>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-300 ${isDone ? 'line-through opacity-70' : ''}">${escapeHtml(task.descricao)}</p>
+            </div>
+          </div>
+          ${state.isAdmin ? `
+            <div class="flex items-center gap-1 shrink-0">
+              <button onclick="window.editItem('tarefas', '${task.id}')" class="p-1.5 text-slate-400 hover:text-blue-500 transition-colors">
+                <i class="fa-solid fa-pen text-xs"></i>
+              </button>
+              <button onclick="window.deleteItem('tarefas', '${task.id}')" class="p-1.5 text-slate-400 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-trash-can text-xs"></i>
+              </button>
+            </div>
+          ` : ''}
+        `;
 
-        // --- 9. AUXILIARES ---
-        window.prevDay = () => { currentDate.setDate(currentDate.getDate()-1); renderTarefas(); };
-        window.nextDay = () => { currentDate.setDate(currentDate.getDate()+1); renderTarefas(); };
-        window.goToToday = () => { currentDate = new Date(); renderTarefas(); };
-        window.filterByMateria = (val) => { mFilter = val; renderTarefas(); };
-        window.toggleConcluida = (id) => {
-            const list = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-            const idx = list.indexOf(id);
-            if(idx > -1) list.splice(idx, 1); else list.push(id);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-            renderTarefas();
-        };
-        function updateMateriaFilter() {
-            const select = document.getElementById('materia-filter');
-            const mats = [...new Set(tarefas.map(t=>t.materia))].sort();
-            select.innerHTML = '<option value="todas">Todas as matérias</option>';
-            mats.forEach(m => select.innerHTML += `<option value="${m}" ${mFilter===m?'selected':''}>${m}</option>`);
-        }
+        container.appendChild(card);
+      });
 
-        // --- 10. MODAL E AUTENTICAÇÃO ---
-        function updateAdminUI() {
-            document.getElementById('login-link').classList.toggle('hidden', isAdmin);
-            document.getElementById('logout-btn').classList.toggle('hidden', !isAdmin);
-            document.getElementById('admin-tarefas-form').classList.toggle('hidden', !isAdmin);
-            document.getElementById('admin-provas-form').classList.toggle('hidden', !isAdmin);
-            document.getElementById('admin-avisos-form').classList.toggle('hidden', !isAdmin);
-        }
-
-        window.openLoginModal = () => { 
-            const m = document.getElementById('login-modal'); const c = document.getElementById('login-modal-content');
-            m.classList.remove('hidden'); m.classList.add('flex');
-            setTimeout(() => { m.classList.remove('opacity-0'); c.classList.remove('scale-95'); }, 10);
-            document.getElementById('login-email').focus();
-        };
-        window.closeLoginModal = () => { 
-            const m = document.getElementById('login-modal'); const c = document.getElementById('login-modal-content');
-            m.classList.add('opacity-0'); c.classList.add('scale-95');
-            setTimeout(() => { m.classList.add('hidden'); m.classList.remove('flex'); }, 300);
-            document.getElementById('login-error').classList.add('hidden');
-        };
-        window.doLogin = async (e) => {
-            e.preventDefault();
-            const em = document.getElementById('login-email').value; const pw = document.getElementById('login-password').value;
-            const btn = document.getElementById('login-btn'); btn.textContent = 'Autenticando...'; btn.disabled = true;
-            try { await signInWithEmailAndPassword(auth, em, pw); closeLoginModal(); showToast('Acesso administrativo liberado.'); e.target.reset(); }
-            catch(err) { document.getElementById('login-error').classList.remove('hidden'); }
-            finally { btn.textContent = 'Autenticar'; btn.disabled = false; }
-        };
-        window.logout = async () => { await signOut(auth); showToast('Sessão administrativa encerrada.'); };
-
-        document.getElementById('login-modal').addEventListener('click', (e) => {
-            if(e.target === document.getElementById('login-modal')) closeLoginModal();
+      // Eventos de Checkbox
+      container.querySelectorAll('.task-checkbox').forEach(chk => {
+        chk.addEventListener('change', (e) => {
+          const taskId = e.target.getAttribute('data-id');
+          if (e.target.checked) {
+            state.completedTasks[taskId] = true;
+          } else {
+            delete state.completedTasks[taskId];
+          }
+          localStorage.setItem('csu_completed_tasks', JSON.stringify(state.completedTasks));
+          renderDailyTasks();
+          renderStatistics();
+          updateFaviconBadge();
         });
+      });
+    }
 
-        // --- 11. FIREBASE REALTIME ---
-        onValue(tarefasRef, (snap) => { const d=snap.val(); tarefas = d?Object.keys(d).map(k=>({id:k,...d[k]})):[]; updateMateriaFilter(); renderTarefas(); });
-        onValue(provasRef, (snap) => { const d=snap.val(); provas = d?Object.keys(d).map(k=>({id:k,...d[k]})):[]; renderCalendario(); });
-        onValue(avisosRef, (snap) => { const d=snap.val(); avisos = d?Object.keys(d).map(k=>({id:k,...d[k]})):[]; renderAvisos(); });
+    // Função Auxiliar de Cores para Matérias
+    function getSubjectBadgeColor(subject) {
+      const colors = {
+        'Português': 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300',
+        'Matemática': 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300',
+        'História': 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300',
+        'Geografia': 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300',
+        'Ciências': 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300',
+        'Inglês': 'bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300',
+        'Arte': 'bg-pink-100 dark:bg-pink-900/50 text-pink-700 dark:text-pink-300',
+        'Educação Física': 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300'
+      };
+      return colors[subject] || 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300';
+    }
 
-        // --- 12. ANIMAÇÃO DE CONFETES E URSO ---
-        window.triggerBearAnimation = function() {
-            const container = document.getElementById('bear-animation-container');
-            const bg = document.getElementById('bear-bg');
-            const content = document.getElementById('bear-content');
-            const bearText = document.getElementById('bear-text');
-            const s1 = document.getElementById('star1'); const s2 = document.getElementById('star2'); const s3 = document.getElementById('star3');
+    // ------------------------------------------------------------------
+    // PAINEL DE ESTATÍSTICAS
+    // ------------------------------------------------------------------
+    function renderStatistics() {
+      const dateStr = formatDateKey(state.currentDate);
+      const dayTasks = Object.entries(state.tasks)
+        .map(([id, task]) => ({ id, ...task }))
+        .filter(task => task.data === dateStr);
 
-            container.classList.remove('hidden'); container.classList.add('flex');
-            void container.offsetWidth;
+      const total = dayTasks.length;
+      const completed = dayTasks.filter(t => !!state.completedTasks[t.id]).length;
+      const pending = total - completed;
+      const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
-            setTimeout(() => bg.classList.remove('opacity-0'), 10);
-            content.classList.add('anim-bear');
-            s1.classList.add('anim-star-1'); s2.classList.add('anim-star-2'); s3.classList.add('anim-star-3');
-            bearText.classList.add('anim-text');
+      document.getElementById('statTotalToday').textContent = total;
+      document.getElementById('statCompletedPct').textContent = `${pct}%`;
+      document.getElementById('statPendingToday').textContent = pending;
 
-            createConfetti(container);
+      // Cálculo da média dos últimos 7 dias
+      let totalTasks7Days = 0;
+      let completedTasks7Days = 0;
 
-            setTimeout(() => {
-                bg.classList.add('opacity-0');
-                content.classList.remove('anim-bear');
-                s1.classList.remove('anim-star-1'); s2.classList.remove('anim-star-2'); s3.classList.remove('anim-star-3');
-                bearText.classList.remove('anim-text');
-                
-                const confettis = document.querySelectorAll('.confetti');
-                confettis.forEach(c => c.remove());
+      for (let i = 0; i < 7; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const k = formatDateKey(d);
+        const tasksForD = Object.entries(state.tasks)
+          .map(([id, t]) => ({ id, ...t }))
+          .filter(t => t.data === k);
+        
+        totalTasks7Days += tasksForD.length;
+        completedTasks7Days += tasksForD.filter(t => !!state.completedTasks[t.id]).length;
+      }
 
-                setTimeout(() => { container.classList.add('hidden'); container.classList.remove('flex'); }, 500);
-            }, 6000);
-        };
+      const avgPct = totalTasks7Days > 0 ? Math.round((completedTasks7Days / totalTasks7Days) * 100) : 0;
+      document.getElementById('statAvg7Days').textContent = `${avgPct}%`;
+    }
 
-        function createConfetti(parent) {
-            const colors = ['#dc2626', '#facc15', '#ffffff', '#3b82f6', '#10b981'];
-            for(let i=0; i<100; i++) {
-                const conf = document.createElement('div');
-                conf.classList.add('confetti');
-                const size = Math.random() * 8 + 6;
-                conf.style.width = `${size}px`;
-                conf.style.height = `${size * 2}px`;
-                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                conf.style.left = `${Math.random() * 100}vw`;
-                
-                const duration = Math.random() * 3 + 2;
-                const delay = Math.random() * 0.5;
-                const rotation = Math.random() * 720 + 360;
-                const horizontalMovement = Math.random() * 300 - 150;
-                
-                conf.animate([
-                    { transform: `translate3d(0,-20px,0) rotate(0deg)`, opacity: 1 },
-                    { transform: `translate3d(${horizontalMovement}px, 100vh, 0) rotate(${rotation}deg)`, opacity: 0 }
-                ], { duration: duration * 1000, delay: delay * 1000, easing: 'cubic-bezier(.37,0,.63,1)', fill: 'forwards' });
-                
-                parent.appendChild(conf);
-            }
+    // ------------------------------------------------------------------
+    // ABA 2: VISÃO SEMANAL
+    // ------------------------------------------------------------------
+    function renderWeeklyView() {
+      const container = document.getElementById('weeklyGridContainer');
+      container.innerHTML = '';
+
+      const startOfWeek = new Date(state.currentDate);
+      const day = startOfWeek.getDay();
+      const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1); // Segunda-feira como início
+      startOfWeek.setDate(diff + (state.currentWeekOffset * 7));
+
+      const daysOfWeek = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+
+      for (let i = 0; i < 7; i++) {
+        const current = new Date(startOfWeek);
+        current.setDate(startOfWeek.getDate() + i);
+        const dateKey = formatDateKey(current);
+
+        const tasksForDay = Object.values(state.tasks).filter(t => t.data === dateKey);
+
+        const col = document.createElement('div');
+        col.className = 'bg-white dark:bg-csu-cardDark p-3 rounded-2xl border border-slate-200 dark:border-csu-borderDark flex flex-col gap-2 min-h-[160px]';
+        col.innerHTML = `
+          <div class="border-b border-slate-100 dark:border-slate-800 pb-2 text-center">
+            <span class="text-xs font-bold text-csu-red uppercase block">${daysOfWeek[i]}</span>
+            <span class="text-xs text-slate-400 font-semibold">${current.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</span>
+          </div>
+          <div class="space-y-1.5 flex-1">
+            ${tasksForDay.length === 0 ? '<p class="text-[10px] text-slate-400 text-center py-4">Sem tarefas</p>' : ''}
+            ${tasksForDay.map(t => `
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-xs">
+                <span class="font-bold block truncate">${escapeHtml(t.titulo)}</span>
+                <span class="text-[10px] text-slate-400">${t.materia}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+
+        container.appendChild(col);
+      }
+
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+      document.getElementById('weekRangeDisplay').textContent = `${startOfWeek.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} - ${endOfWeek.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}`;
+    }
+
+    // ------------------------------------------------------------------
+    // ABA 3: CALENDÁRIO DE PROVAS
+    // ------------------------------------------------------------------
+    let calendarDate = new Date();
+
+    function renderCalendar() {
+      const grid = document.getElementById('calendarDaysGrid');
+      grid.innerHTML = '';
+
+      const year = calendarDate.getFullYear();
+      const month = calendarDate.getMonth();
+
+      document.getElementById('calendarMonthDisplay').textContent = calendarDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // Espaços vazios do início
+      for (let i = 0; i < firstDay; i++) {
+        grid.appendChild(document.createElement('div'));
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const fullDate = new Date(year, month, day);
+        const dateKey = formatDateKey(fullDate);
+        const examsOnDay = Object.values(state.exams).filter(e => e.data === dateKey);
+
+        const dayEl = document.createElement('button');
+        dayEl.className = `p-2 min-h-[48px] rounded-xl border flex flex-col items-center justify-between text-xs font-bold transition-all ${
+          examsOnDay.length > 0 
+            ? 'bg-red-50 dark:bg-red-950/40 border-csu-red text-csu-red' 
+            : 'border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+        }`;
+
+        dayEl.innerHTML = `
+          <span>${day}</span>
+          ${examsOnDay.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full bg-csu-red"></span>` : ''}
+        `;
+
+        grid.appendChild(dayEl);
+      }
+    }
+
+    function renderExamsList() {
+      const container = document.getElementById('examsListContainer');
+      container.innerHTML = '';
+
+      const exams = Object.entries(state.exams)
+        .map(([id, exam]) => ({ id, ...exam }))
+        .sort((a, b) => new Date(a.data) - new Date(b.data));
+
+      if (exams.length === 0) {
+        container.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">Nenhuma prova agendada.</p>';
+        return;
+      }
+
+      exams.forEach(exam => {
+        const googleCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Prova: ' + exam.titulo)}&details=${encodeURIComponent(exam.descricao || '')}&dates=${exam.data.replace(/-/g, '')}/${exam.data.replace(/-/g, '')}`;
+
+        const card = document.createElement('div');
+        card.className = 'p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-csu-borderDark flex items-center justify-between gap-3 text-xs';
+        card.innerHTML = `
+          <div class="space-y-1">
+            <span class="px-2 py-0.5 rounded text-[9px] font-black uppercase ${getSubjectBadgeColor(exam.materia)}">${exam.materia}</span>
+            <h4 class="font-bold text-sm">${escapeHtml(exam.titulo)}</h4>
+            <p class="text-slate-500 dark:text-slate-400 text-[11px]"><i class="fa-regular fa-calendar mr-1"></i>${new Date(exam.data + 'T00:00:00').toLocaleDateString('pt-BR')}</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <a href="${googleCalUrl}" target="_blank" title="Exportar para Google Calendar" class="p-2 text-slate-400 hover:text-amber-500 transition-colors">
+              <i class="fa-solid fa-calendar-plus text-sm"></i>
+            </a>
+            ${state.isAdmin ? `
+              <button onclick="window.editItem('provas', '${exam.id}')" class="p-1 text-slate-400 hover:text-blue-500"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="window.deleteItem('provas', '${exam.id}')" class="p-1 text-slate-400 hover:text-red-500"><i class="fa-solid fa-trash-can"></i></button>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ------------------------------------------------------------------
+    // ABA 4: MURAL DE AVISOS
+    // ------------------------------------------------------------------
+    function renderNotices() {
+      const container = document.getElementById('noticesGridContainer');
+      container.innerHTML = '';
+
+      const notices = Object.entries(state.notices)
+        .map(([id, notice]) => ({ id, ...notice }))
+        .reverse();
+
+      if (notices.length === 0) {
+        container.innerHTML = '<p class="text-xs text-slate-400 col-span-full text-center py-8">Nenhum aviso publicado.</p>';
+        return;
+      }
+
+      notices.forEach(notice => {
+        const card = document.createElement('div');
+        card.className = 'p-5 rounded-2xl bg-white dark:bg-csu-cardDark border border-slate-200 dark:border-csu-borderDark shadow-sm flex flex-col justify-between gap-3';
+        card.innerHTML = `
+          <div class="space-y-3">
+            ${notice.imageUrl ? `<img src="${escapeHtml(notice.imageUrl)}" loading="lazy" class="w-full h-36 object-cover rounded-xl mb-2">` : ''}
+            <div>
+              <h3 class="font-extrabold text-base mb-1">${escapeHtml(notice.titulo)}</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">${escapeHtml(notice.descricao)}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800 text-[10px] text-slate-400">
+            <span>${notice.data ? new Date(notice.data).toLocaleDateString('pt-BR') : 'Geral'}</span>
+            ${state.isAdmin ? `
+              <div class="flex items-center gap-1">
+                <button onclick="window.editItem('avisos', '${notice.id}')" class="p-1 hover:text-blue-500"><i class="fa-solid fa-pen"></i></button>
+                <button onclick="window.deleteItem('avisos', '${notice.id}')" class="p-1 hover:text-red-500"><i class="fa-solid fa-trash-can"></i></button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ------------------------------------------------------------------
+    // ABA 5: HISTÓRICO DE TAREFAS
+    // ------------------------------------------------------------------
+    function renderHistory() {
+      const container = document.getElementById('historyListContainer');
+      container.innerHTML = '';
+
+      const todayStr = formatDateKey(new Date());
+      const historyTasks = Object.entries(state.tasks)
+        .map(([id, t]) => ({ id, ...t }))
+        .filter(t => t.data < todayStr)
+        .sort((a, b) => new Date(b.data) - new Date(a.data));
+
+      if (historyTasks.length === 0) {
+        container.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">Nenhum histórico antigo encontrado.</p>';
+        return;
+      }
+
+      historyTasks.forEach(task => {
+        const isDone = !!state.completedTasks[task.id];
+        const card = document.createElement('div');
+        card.className = 'p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs';
+        card.innerHTML = `
+          <div class="space-y-0.5">
+            <div class="flex items-center gap-2">
+              <span class="font-bold ${isDone ? 'line-through text-slate-400' : ''}">${escapeHtml(task.titulo)}</span>
+              <span class="text-[9px] text-slate-400">(${new Date(task.data + 'T00:00:00').toLocaleDateString('pt-BR')})</span>
+            </div>
+            <p class="text-[11px] text-slate-500">${escapeHtml(task.materia)}</p>
+          </div>
+          <span class="text-[10px] font-bold ${isDone ? 'text-emerald-500' : 'text-amber-500'}">
+            ${isDone ? 'Concluída' : 'Pendente'}
+          </span>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ------------------------------------------------------------------
+    // BUSCA GLOBAL
+    // ------------------------------------------------------------------
+    function setupGlobalSearch() {
+      const inputs = [document.getElementById('globalSearchInput'), document.getElementById('globalSearchInputMobile')];
+      
+      inputs.forEach(input => {
+        input?.addEventListener('input', (e) => {
+          const query = e.target.value.toLowerCase().trim();
+          if (query.length < 2) {
+            document.getElementById('searchResultsSection').classList.add('hidden');
+            return;
+          }
+
+          document.getElementById('searchResultsSection').classList.remove('hidden');
+          const container = document.getElementById('searchResultsContainer');
+          container.innerHTML = '';
+
+          // Busca em Tarefas
+          const matchingTasks = Object.values(state.tasks).filter(t => t.titulo?.toLowerCase().includes(query) || t.descricao?.toLowerCase().includes(query) || t.materia?.toLowerCase().includes(query));
+          
+          // Busca em Provas
+          const matchingExams = Object.values(state.exams).filter(e => e.titulo?.toLowerCase().includes(query) || e.materia?.toLowerCase().includes(query));
+
+          // Busca em Avisos
+          const matchingNotices = Object.values(state.notices).filter(n => n.titulo?.toLowerCase().includes(query) || n.descricao?.toLowerCase().includes(query));
+
+          const totalResults = [...matchingTasks, ...matchingExams, ...matchingNotices];
+
+          if (totalResults.length === 0) {
+            container.innerHTML = '<p class="text-xs text-slate-400 col-span-full py-4">Nenhum resultado encontrado para a busca.</p>';
+            return;
+          }
+
+          totalResults.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'p-3 rounded-xl bg-white dark:bg-csu-cardDark border border-slate-200 dark:border-csu-borderDark text-xs shadow-sm';
+            card.innerHTML = `
+              <span class="text-[9px] font-extrabold uppercase text-csu-red block mb-1">${item.materia || 'Aviso'}</span>
+              <h4 class="font-bold">${escapeHtml(item.titulo)}</h4>
+              <p class="text-slate-500 text-[11px] truncate">${escapeHtml(item.descricao || '')}</p>
+            `;
+            container.appendChild(card);
+          });
+        });
+      });
+
+      document.getElementById('closeSearchBtn')?.addEventListener('click', () => {
+        inputs.forEach(i => i.value = '');
+        document.getElementById('searchResultsSection').classList.add('hidden');
+      });
+    }
+
+    // ------------------------------------------------------------------
+    // NOTIFICAÇÕES & FAVICON DYNÁMICO
+    // ------------------------------------------------------------------
+    function initNotifications() {
+      if ('Notification' in window && Notification.permission !== 'granted') {
+        Notification.requestPermission();
+      }
+    }
+
+    function checkTomorrowReminders() {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowStr = formatDateKey(tomorrow);
+
+      const tomorrowTasks = Object.values(state.tasks).filter(t => t.data === tomorrowStr);
+      const banner = document.getElementById('tomorrowReminderBanner');
+
+      if (tomorrowTasks.length > 0) {
+        banner.classList.remove('hidden');
+        document.getElementById('tomorrowReminderText').textContent = `Você possui ${tomorrowTasks.length} tarefa(s) agendada(s) para amanhã (${tomorrowTasks.map(t => t.titulo).join(', ')}).`;
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+
+    function updateFaviconBadge() {
+      const todayStr = formatDateKey(new Date());
+      const pendingToday = Object.entries(state.tasks)
+        .map(([id, t]) => ({ id, ...t }))
+        .filter(t => t.data === todayStr && !state.completedTasks[t.id]).length;
+
+      document.title = pendingToday > 0 
+        ? `(${pendingToday}) Portal CSU - Turma 8C` 
+        : `Portal CSU - Turma 8C`;
+    }
+
+    // ------------------------------------------------------------------
+    // MODAIS & CRUD ADMIN
+    // ------------------------------------------------------------------
+    window.openModal = function(id) {
+      document.getElementById(id)?.classList.remove('hidden');
+    };
+
+    window.closeModal = function(id) {
+      document.getElementById(id)?.classList.add('hidden');
+    };
+
+    // Botões de Adicionar
+    document.getElementById('addTaskAdminBtn').addEventListener('click', () => openItemModal('tarefas'));
+    document.getElementById('addExamAdminBtn').addEventListener('click', () => openItemModal('provas'));
+    document.getElementById('addNoticeAdminBtn').addEventListener('click', () => openItemModal('avisos'));
+
+    function openItemModal(type, itemId = null) {
+      document.getElementById('modalItemType').value = type;
+      document.getElementById('modalItemId').value = itemId || '';
+      document.getElementById('itemModalTitle').textContent = itemId ? 'Editar Item' : 'Novo Item';
+
+      const fieldAttachment = document.getElementById('fieldAttachment');
+      fieldAttachment.classList.toggle('hidden', type !== 'avisos');
+
+      if (itemId) {
+        const item = state[type][itemId];
+        document.getElementById('modalTitle').value = item.titulo || '';
+        document.getElementById('modalSubject').value = item.materia || 'Geral';
+        document.getElementById('modalDate').value = item.data || formatDateKey(new Date());
+        document.getElementById('modalDescription').value = item.descricao || '';
+        document.getElementById('modalImageUrl').value = item.imageUrl || '';
+      } else {
+        document.getElementById('itemForm').reset();
+        document.getElementById('modalDate').value = formatDateKey(state.currentDate);
+      }
+
+      openModal('itemModal');
+    }
+
+    // Edição e Exclusão Globais
+    window.editItem = function(type, id) {
+      openItemModal(type, id);
+    };
+
+    window.deleteItem = function(type, id) {
+      if (confirm('Deseja realmente excluir este item?')) {
+        remove(ref(db, `${type}/${id}`))
+          .then(() => showToast('Item excluído com sucesso!'))
+          .catch(() => showToast('Erro ao excluir item.', 'error'));
+      }
+    };
+
+    // Submit do Formulário Dinâmico
+    document.getElementById('itemForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const type = document.getElementById('modalItemType').value;
+      const itemId = document.getElementById('modalItemId').value;
+
+      const payload = {
+        titulo: document.getElementById('modalTitle').value.trim(),
+        materia: document.getElementById('modalSubject').value,
+        data: document.getElementById('modalDate').value,
+        descricao: document.getElementById('modalDescription').value.trim(),
+        imageUrl: document.getElementById('modalImageUrl').value.trim() || null
+      };
+
+      try {
+        if (itemId) {
+          await update(ref(db, `${type}/${itemId}`), payload);
+          showToast('Item atualizado com sucesso!');
+        } else {
+          await push(ref(db, type), payload);
+          showToast('Item criado com sucesso!');
         }
-    </script>
+        closeModal('itemModal');
+      } catch (err) {
+        showToast('Erro ao salvar item no banco de dados.', 'error');
+      }
+    });
+
+    // ------------------------------------------------------------------
+    // EVENT LISTENERS DE NAVEGAÇÃO DE DATAS
+    // ------------------------------------------------------------------
+    function initEventListeners() {
+      // Dia anterior / próximo
+      document.getElementById('prevDayBtn').addEventListener('click', () => {
+        state.currentDate.setDate(state.currentDate.getDate() - 1);
+        renderCurrentDateDisplay();
+        renderDailyTasks();
+        renderStatistics();
+      });
+
+      document.getElementById('nextDayBtn').addEventListener('click', () => {
+        state.currentDate.setDate(state.currentDate.getDate() + 1);
+        renderCurrentDateDisplay();
+        renderDailyTasks();
+        renderStatistics();
+      });
+
+      document.getElementById('todayBtn').addEventListener('click', () => {
+        state.currentDate = new Date();
+        renderCurrentDateDisplay();
+        renderDailyTasks();
+        renderStatistics();
+      });
+
+      // Filtro de Matéria
+      document.getElementById('subjectFilter').addEventListener('change', renderDailyTasks);
+
+      // Concluir Todas do Dia
+      document.getElementById('completeAllBtn').addEventListener('click', () => {
+        const dateStr = formatDateKey(state.currentDate);
+        const dayTasks = Object.entries(state.tasks)
+          .map(([id, t]) => ({ id, ...t }))
+          .filter(t => t.data === dateStr);
+
+        dayTasks.forEach(t => state.completedTasks[t.id] = true);
+        localStorage.setItem('csu_completed_tasks', JSON.stringify(state.completedTasks));
+        renderDailyTasks();
+        renderStatistics();
+        showToast('Todas as tarefas do dia foram concluídas!');
+      });
+
+      // Navegação da Visão Semanal
+      document.getElementById('prevWeekBtn').addEventListener('click', () => {
+        state.currentWeekOffset--;
+        renderWeeklyView();
+      });
+      document.getElementById('nextWeekBtn').addEventListener('click', () => {
+        state.currentWeekOffset++;
+        renderWeeklyView();
+      });
+
+      // Navegação do Calendário
+      document.getElementById('prevMonthBtn').addEventListener('click', () => {
+        calendarDate.setMonth(calendarDate.getMonth() - 1);
+        renderCalendar();
+      });
+      document.getElementById('nextMonthBtn').addEventListener('click', () => {
+        calendarDate.setMonth(calendarDate.getMonth() + 1);
+        renderCalendar();
+      });
+
+      // Easter Egg Kahoot
+      document.getElementById('kahootBtn').addEventListener('click', () => openModal('kahootModal'));
+
+      setupGlobalSearch();
+    }
+
+    // ------------------------------------------------------------------
+    // TOASTS DE NOTIFICAÇÃO & UTILITÁRIOS
+    // ------------------------------------------------------------------
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      toast.className = `p-3 px-4 rounded-xl shadow-lg text-xs font-bold text-white transition-all transform translate-y-2 flex items-center gap-2 pointer-events-auto ${
+        type === 'error' ? 'bg-red-600' : 'bg-slate-900 dark:bg-slate-100 dark:text-slate-900'
+      }`;
+
+      toast.innerHTML = `
+        <i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'} text-sm"></i>
+        <span>${escapeHtml(message)}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-4');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>"']/g, match => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[match]);
+    }
+  </script>
 </body>
 </html>
